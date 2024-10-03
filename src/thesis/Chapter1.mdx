@@ -1,0 +1,99 @@
+# Introduction
+
+Trajectory optimization offers a powerful approach for planning robot
+motions
+[@diehl2006fast; @augugliaro2012generation; @schulman2014motion; @majumdar2017funnel; @zhang2020optimization],
+capable of generating dynamically feasible trajectories that respect
+kinematic and dynamic constraints
+ [@goretkin2013optimal; @webb2012kinodynamic; @wu2020r3t]. However, the
+inherent nonconvexity of collision-free space often leads to suboptimal
+solutions or even failures to find feasible paths
+[@lavalle2006planning]. While existing sampling-based planners like RRTs
+and PRMs [@karaman2011sampling; @gammell2014informed; @janson2015fast]
+can handle nonconvexity, they present several practical challenges.
+
+In my industry experience, I have observed that finding collision-free
+trajectories using sampling-based planners, like RRTs and PRMs, can be
+unreliable, particularly in complex or high-dimensional configuration
+spaces. This unreliability stems from the very nature of sampling-based
+methods, which may struggle to adequately explore the vast space of
+possible robot configurations. Even when a collision-free path is found,
+it often exhibits jaggedness, requiring computationally expensive
+smoothing techniques that still tend to yield suboptimal motions. This
+lack of smoothness can lead to jerky robot behavior, potentially causing
+the low-level trajectory tracking controller to deviate from the desired
+trajectory, resulting in unwanted collisions or undesirable interactions
+with the environment or manipulated objects. Furthermore, the absence of
+an inherent notion of time in these planners often leads to simplistic,
+constant-speed trajectory parametrizations.
+
+Such rudimentary time parametrizations either underutilize the robot's
+dynamic capabilities or risk violating its limits. Even with powerful
+time optimal reparametrization [@Verscheure09], the disconnect between
+path planning and timing further exacerbates the problem of finding
+truly optimal trajectories. A common misconception in robotic motion
+planning is that minimizing path length and then performing time
+parametrization will yield a minimum-time trajectory. However, this
+approach overlooks the crucial interplay between path geometry and
+dynamic constraints. A trajectory optimized for minimum path length
+might involve sharp turns or rapid changes in direction that are
+infeasible to execute at high speeds, leading to suboptimal results.
+Consequently, a minimum-time trajectory might necessitate a completely
+different discrete path, potentially navigating through wider curves or
+taking alternative routes to leverage the robot's full dynamic
+capabilities while respecting its limitations.
+
+The challenges of sampling-based methods become even more pronounced
+when considering long-horizon trajectories, especially for mobile bases
+operating in expansive environments. The computational burden of
+sampling such vast spaces often necessitates the use of heuristics,
+which can compromise solution quality. Furthermore, the performance of
+these planners is highly sensitive to parameter tuning, requiring
+significant effort to obtain satisfactory results for different tasks
+and environments. Their lack of optimality guarantees further
+complicates their reliable deployment in practical settings.
+
+This thesis introduces a novel approach that leverages the strengths of
+the Graph of Convex Sets (GCS) framework [@marcucci2023motion] to guide
+nonlinear trajectory optimization. GCS provides a powerful tool for
+global optimization over an approximate convex decomposition
+[@petersen2023growing] of the configuration space. We extend this
+framework to incorporate a broader range of cost functions and
+constraints, including those involving nonconvexities, through a hybrid
+approach that combines convex surrogates for global guidance with
+efficient rounding via nonlinear optimization.
+
+Furthermore, we propose a hierarchical structure for the GCS, organizing
+it into connected subgraphs. This enables the formulation of problems
+with intermediate goals or logical decision-making using series or
+parallel connections between subgraphs. This hierarchical approach
+enables us to plan continuous trajectories while simultaneously making
+discrete decisions, gaining fine-grained control over the constraints
+and costs imposed at different stages of a task.
+
+We evaluate the effectiveness of this approach across a range of
+challenging robotic motion planning scenarios. These evaluations
+demonstrate the capability to generate smooth, dynamically feasible
+trajectories while simultaneously optimizing for multiple objectives and
+satisfying diverse constraints. First, we consider the problem of
+planning minimum-snap trajectories for quadrotors navigating cluttered
+environments. Our method successfully incorporates acceleration
+constraints and continuity requirements, generating trajectories that
+are both efficient and motion-wise smooth. Next, we investigate the
+challenges of planning for manipulators like the KUKA iiwa,
+demonstrating that generated trajectories respect joint limits and
+task-space constraints even in dynamic settings. Finally, we showcase
+the method's applicability to more complex robotic systems like Spot, a
+legged mobile manipulator, planning complex tasks involving sequential
+goals and adaptation to unforeseen obstacles, and even scaling to a
+50-dimensional configuration space for planning coordinated motions of
+two Spots.
+
+The results of these evaluations highlight the robustness and
+versatility of our approach, showcasing its potential to advance the
+state of the art in robotic motion planning. The following chapters
+delve into the theoretical foundations, implementation details, and
+experimental validations of our proposed method.
+
+
+[^ref]

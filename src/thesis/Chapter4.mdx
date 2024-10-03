@@ -1,0 +1,743 @@
+# Application
+
+We demonstrate the effectiveness of our nonlinear extension to GCS
+trajectory optimization (NGCSTrajOpt) through a series of numerical
+examples. First, we revisit the 2D problem from [@marcucci2023motion] to
+highlight the impact of nonlinear acceleration and continuity
+constraints on the resulting trajectory (Section
+[4.1](#two-dimensional-example)). Next, we showcase
+minimum-snap trajectory planning for quadrotors, incorporating
+continuity, velocity, and acceleration constraints (Section
+[4.2](#quadrotor-example)). Finally, we demonstrate
+planning executable trajectories for the KUKA iiwa robot, considering
+task-space constraints and dynamic environments with obstacles (Section
+[4.3](#manipulation-example)).
+
+All results are reproducible using the code available at
+[https://ngcs-trajopt.github.io](https://ngcs-trajopt.github.io) with the nonlinear extension also
+available in Drake [@drake]. We used Mosek 10.1 [@mosek] for solving the
+relaxation problems and SNOPT 7.2 [@gill2005snopt] for the rounded
+problems.
+
+<figure id="fig:2d_gcs_comparison">
+    <figure id="fig:2d_obstacles">
+        <img src="figures/two_dimensional_example/environment.png" />
+        <figcaption>2D Environment</figcaption>
+    </figure>
+    <figure id="fig:2d_decomposition">
+        <img src="figures/two_dimensional_example/decomposition.png" />
+        <figcaption>Free Space</figcaption>
+    </figure>
+    <figure id="fig:classical_gcs">
+        {/* <p><img src="figures/two_dimensional_example/classical_gcs_traj.png"
+        style="width:100.0%" alt="image" /> <img
+        src="figures/two_dimensional_example/classical_gcs_deriatives.png"
+        style="height:120.0%" alt="image" /></p> */}
+        <figcaption>Convex GCS</figcaption>
+    </figure>
+    <figure id="fig:gcs_toppra">
+        {/* <p><img src="figures/two_dimensional_example/toppra_gcs_traj.png"
+        style="width:100.0%" alt="image" /> <img
+        src="figures/two_dimensional_example/toppra_gcs_derivatives.png"
+        style="height:120.0%" alt="image" /></p> */}
+        <figcaption>GCS + TOPP</figcaption>
+    </figure>
+    <figure id="fig:gcs_nonlinear">
+        {/* <p><img src="figures/two_dimensional_example/ngcs_traj.png"
+        style="width:100.0%" alt="image" /> <img
+        src="figures/two_dimensional_example/ngcs_derivatives.png"
+        style="height:120.0%" alt="image" /></p> */}
+        <figcaption>NGCS</figcaption>
+    </figure>
+    {/* <figcaption>Figure 4: 2D comparison of GCS trajectory optimization with
+    GCS + TOPP and nonconvex GCS (The trajectory is blue). Obstacles in red,
+    the initial <span class="math inline"><em>q</em><sub>0</sub></span> and
+    final <span class="math inline"><em>q</em><sub><em>T</em></sub></span>
+    configurations are marked with crosses and the free space is decomposed
+    in convex safe regions <span
+    class="math inline">𝒬<sub><em>i</em></sub></span> (in light blue). The
+    blue graph in the velocity and acceleration plot illustrates the
+    horizontal component in x and the orange plot for the vertical component
+    in y. The left column shows the convex duration transcription of GCS and
+    its corresponding velocities and accelerations. The middle column
+    illustrates the same path, but with a reparametrization using TOPP and
+    acceleration bounds. Lastly, we show our method that includes nonlinear
+    continuity constraints and acceleration bounds.</figcaption> */}
+</figure>
+
+## 4.1   Two Dimensional Example
+
+### 4.1.1    Comparison of Post-processing with NGCSTrajOpt
+
+As acceleration constraints are nonlinear, convex GCSTrajOpt can only
+manage velocity constraints, producing unrealistic accelerations, which
+could be regularized, but not bounded[@marcucci2023motion]. Widely
+accessible tools, such as time optimal path parameterization
+(TOPP) [@Verscheure09], enable time reparametrization of a given path by
+incorporating acceleration bounds. Our nonlinear problem formulation
+allows derivative bounds up to the order of the Bézier curve and higher
+order continuity, while considering multiple discrete paths.
+
+We revisit the 2D example from [@marcucci2023motion] with velocity
+bounds of \[-2, 2\] $m/s$ and acceleration bounds of \[-1, 1\] $m/s^2$.
+Bézier curves of order six are used for each region.
+
+Convex GCSTrajOpt, limited to velocity constraints, plans a path around
+the obstacle from below (Figure[4.3](#fig:classical_gcs)).
+While achieving a short duration of 5.3
+seconds, the trajectory exhibits unrealistic accelerations
+(approximately 150 $m/s^2$) at the final turn. If this trajectory were
+for a fighter jet, the pilot would experience 15g. Applying TOPP to this
+path reparameterizes the time to satisfy acceleration bounds (Figure
+[4.4](#fig:gcs_toppra)), resulting in a longer duration of 13.8
+seconds.
+
+In contrast, our method jointly optimizes velocity and acceleration
+bounds, producing a dynamically feasible trajectory without requiring
+post-processing (Figure [4.5](#fig:gcs_nonlinear)). Notably, NGCSTrajOpt chooses a
+different path, going above the obstacle, and achieves a faster duration
+of 10.4 seconds. This would not have been achieved with TOPP since the
+path is fixed, and it only optimizes for time.
+
+### 4.1.2    Planning through Hierarchical Graphs
+
+<figure id="fig:2d_subgraphs">
+    <figure id="fig:inter_gcs">
+        <img src="figures/two_dimensional_example/intermediate_traj.png" />
+        <img
+        src="figures/two_dimensional_example/intermediate_derivatives.png" />
+        <figcaption>Planning through Subspaces</figcaption>
+    </figure>
+    <figure id="fig:multi_gcs">
+        <img src="figures/two_dimensional_example/multi_start_traj.png" />
+        <img
+        src="figures/two_dimensional_example/multi_start_derivatives.png" />
+        <figcaption>Multi Start/Goal Planning</figcaption>
+    </figure>
+<figcaption>Figure 5: Planning with intermediate waypoints and
+multi-start/goal points. The left column shows a planning problem, which
+is constrained to find a solution going through the light blue subspace
+between the two red obstacles in the middle. The right column shows a
+problem with two possible start configurations <span
+class="math inline"><em>q</em><sub>0</sub></span> and two final
+configurations <span
+class="math inline"><em>q</em><sub><em>T</em></sub></span>
+configurations, where one of them is not a point, but a target region in
+light blue. The blue graph in the velocity and acceleration plot
+illustrates the horizontal component in x and the orange plot for the
+vertical component in y.</figcaption>
+</figure>
+
+Hierarchical graph planning excels at constructing complex planning
+problems by composing an interconnected graph from multiple subgraphs.
+This approach allows us to seamlessly integrate additional constraints
+on the edges and subgraphs, enabling the optimization of both planning
+through waypoints and multi-start/goal scenarios within a single
+optimization problem. By encompassing continuous decision variables like
+positions, velocities, and accelerations, this method avoids the
+potential discontinuities that may arise from solving multiple smaller,
+disconnected problems. Consequently, hierarchical planning ensures
+global consistency and optimally across all variables, leading to
+smoother and more efficient trajectories.
+
+Figure [4.7](#fig:inter_gcs) illustrates a planning scenario where a robot
+is required to traverse a narrow passage (blue region) between obstacles
+to reach a target configuration ($q_T$) from a starting point ($q_0$).
+This problem is constructed using a series of interconnected subgraphs:
+one containing $q_0$, two encompassing the free space regions, and one
+containing $q_T$. Connecting the free-space subgraphs alongside imposing
+a subspace constraint only adds the necessary edges to guide the robot
+through the narrow passage. By incorporating velocity, acceleration
+limits, and continuity constraints, alongside zero velocity and
+acceleration requirements at the start and target, we obtain a smooth
+trajectory that navigates the passage within 15.1 seconds.
+
+Hierarchical graphs also excel in scenarios with multiple start and goal
+regions. As elaborated in Section
+[3.3.3](#section:multi_start_and_goal), dummy vertices can connect
+all regions within starting/ending subgraphs. Figure
+[4.8](#fig:multi_gcs)
+demonstrates this concept within the same environment but with two
+starting points ($q_0$) and a target region (light blue) in addition to
+a single target configuration ($q_T$). The objective is to minimize
+travel time while adhering to velocity and acceleration constraints,
+resulting in the selection of the top starting point and the lowest
+corner of the target region. With zero velocity and acceleration
+constraints at the start and end, the optimal plan takes approximately
+7.9 seconds.
+
+## 4.2    Quadrotor Example
+
+![Figure 6: Three candidate trajectories for a quadrotor navigating from
+the bottom left corner to the top right room of a building. The blue
+trajectory (convex GCS trajectory optimization) is fast but lacks
+smoothness and exhibits unrealistic roll due to high initial
+accelerations. The yellow and red trajectories (proposed method) enforce
+higher-order continuity, limit accelerations, and achieve smoother paths
+while the yellow trajectory also minimizes
+snap.](figures/uav/Drones.png)
+
+This section demonstrates the advantages of our proposed method over the
+convex GCSTrajOpt approach for planning the motion of an unmanned aerial
+vehicle (UAV). Consider the scenario depicted in Figure
+[4.10](#fig:uav), where a
+building contains multiple rooms, windows, and open doors. We manually
+decompose this block world into task-space regions (x, y, z) that form
+the collision-free regions in our graph of convex sets. We will compare
+three different approaches for planning the UAV's trajectory through
+this environment.
+
+Following @mellinger2011minimum, we exploit the differential flatness of
+quadrotors. This allows us to plan in a simpler set of variables, namely
+the position and yaw angle of its center of mass. We can then map it to
+the full thirteen-dimensional quadrotor state space, which includes
+rotations (unit quaternion), translations, and their derivatives.
+
+@mellinger2011minimum also recommends minimizing the squared norm of
+snap (the fourth derivative of position) in the objective function. This
+is beneficial because body moments, which relate directly to net thrust,
+appear in the fourth derivative of the trajectory. Additionally,
+enforcing continuity up to the fourth order ensures smooth and realistic
+motions.
+
+Figure [4.10](#fig:uav)
+compares three trajectories for a scenario where the UAV must navigate
+from one corner of the environment to the top right room of the
+building. All three trajectories have initial and final velocities and
+accelerations set to zero (a special case that is convex in $r(s)$),
+ensuring a level start and finish.
+
+-   **Blue Trajectory:** The baseline trajectory uses the convex
+    GCSTrajOpt with duration transcription, which does not support
+    higher-order continuity on $q(t)$. We minimize the path length and
+    duration with velocity bounds of 16 $m/s$ [@noauthor_skydio_nodate].
+    While this trajectory is fast (1.5 seconds), its lack of smoothness
+    and acceleration constraints leads to abrupt roll and pitch
+    maneuvers while navigating through the building, particularly
+    moments after the start (see bottom left image). The convex
+    formulation cannot constrain higher-order derivatives, even with
+    initial zero accelerations, the solver abruptly jumps to over 100
+    $m/s^2$ to meet the minimum time objective, resulting in unrealistic
+    roll and pitch in the differential flatness model.
+
+    To address this, we can apply Time Optimal Path Parameterization
+    (TOPP) [@Verscheure09] to reparameterize the timing of the path,
+    enforcing acceleration bounds. This yields a trajectory taking 3.5
+    seconds. However, the absence of higher-order continuity is evident
+    in the sharp corners of the blue path, making it non-executable.
+    Enforcing path continuity on $r(s)$ in a convex manner before
+    re-timing with TOPP results in a smoother path with a duration of
+    6.5 seconds.
+
+    It is important to note that our implementation of TOPP does not
+    bound jerk, leading to rapid accelerations and deceleration's that
+    are unattainable. Therefore, an executable trajectory flying through
+    the building might take longer than 6.5 seconds.
+
+-   Red Trajectory: This trajectory utilizes our proposed method,
+    enforcing fourth-order continuity and limiting accelerations to 10
+    $m/s^2$ (a thrust-to-weight ratio of two). The objective function
+    minimizes path length. Notably, this trajectory chooses to fly
+    around the building, avoiding the sharp corners within it, and takes
+    5.0 seconds to complete.
+
+-   Yellow Trajectory: This trajectory also employs our proposed method
+    with the same constraints as the red trajectory. However, the
+    objective function minimizes the convex surrogate for the squared
+    norm of snap, leading to a smoother path that also flies around the
+    building. This trajectory takes 4.7 seconds and avoids sharp turns.
+
+Notably, both the red and yellow trajectories, generated by our
+nonlinear GCS method, achieve shorter duration's than the shortest path
+found by convex GCSTrajOpt re-timed with TOPP. This highlights a key
+advantage of our approach: it optimizes for both the discrete path and
+the continuous trajectory concurrently. This allows our method to
+discover solutions that might not be found by decoupling path planning
+and time parameterization.
+
+Our simplified example plans in Cartesian positions and excludes the yaw
+angle. However, future work could incorporate wraparound in the yaw
+angle using approaches like @cohn2023non.
+
+## 4.3    Manipulation Example
+
+<figure id="fig:kuka_env">
+<figure id="fig:kuka_waypoints">
+<embed src="figures/iiwa_example/waypoint_seeds_labelled.pdf" />
+<figcaption>Waypoints</figcaption>
+</figure>
+<figure id="fig:kuka_extra_seeds">
+<embed src="figures/iiwa_example/additional_seeds_labelled.pdf" />
+<figcaption>Additional Seeds</figcaption>
+</figure>
+<figure>
+<embed src="figures/iiwa_example/graph_crop.pdf" />
+</figure>
+{/* <figcaption>Figure 7: The top left image illustrates the planning
+environment with designated waypoints <span
+class="math inline"><em>q</em><sub>1 − 5</sub></span> and the robot arms
+in transparent at these configurations. The right image shows the
+additional seed points used to connect the convex sets, shown as a graph
+below. Light blue represents the waypoint regions, and orange indicates
+the extra regions.</figcaption> */}
+</figure>
+
+This section compares our proposed nonconvex GCSTrajOpt method with the
+convex approach using the same benchmark example from the original GCS
+trajectory optimization paper [@marcucci2023motion]. We consider the
+KUKA iiwa robot arm, a seven-degree-of-freedom manipulator, operating in
+an environment containing a shelf and two bins on each side (Figure
+[4.13](#fig:kuka_env)).
+Since the configuration space in this scenario cannot be decomposed
+exactly, we employ the IRIS algorithm
+[@amice2022finding; @deits2015computing] to obtain an approximate
+decomposition. Our task involves planning a trajectory that passes
+through five configurations (Figure
+[4.13](#fig:kuka_env)):
+starting above the shelf, then visiting the top rack, middle rack, left
+bin, right bin, and finally returning to the top of the shelf.
+
+<figure id="fig:kuka_traj">
+<div class="center">
+{/* <p><img src="figures/iiwa_example/iiwa_gcs_comparison.png"
+style="width:40.0%" alt="image" /> <img
+src="figures/iiwa_example/gcs_comparison_derivative.png"
+style="width:48.0%" alt="image" /></p> */}
+</div>
+<figcaption>Figure 8: The top image shows the Kuka robot in the
+environment, overlaid NGCS (blue) and classical GCS (orange)
+trajectories, following the end-effector position. The plots compare
+joint velocities and accelerations for both trajectories, focusing on
+joints 2 to 4. GCS violates every joint acceleration limit, whereas NGCS
+adhered to the constraints.</figcaption>
+</figure>
+
+While both the convex and nonconvex GCS trajectory optimization select
+the same minimum-time paths within the graph, the resulting trajectory
+shapes differ significantly. We utilize fifth-order Bézier curves to
+represent the trajectory segments within each region and connect all
+intermediate points sequentially by duplicating the graph. Both methods
+enforce global velocity bounds and zero joint velocities at the waypoint
+configurations. However, NGCSTrajOpt offers the additional advantage of
+incorporating acceleration constraints and continuity in velocity and
+higher orders. We enforce the robot's acceleration limits, require zero
+acceleration at the waypoints, and ensure velocity and acceleration
+continuity throughout the trajectory.
+
+Figure [4.14](#fig:kuka_traj) showcases the solutions obtained by both
+methods, with the end-effector position visualized during trajectory
+execution. The GCSTrajOpt solution (blue path) completes the task in 5.4
+seconds while adhering to velocity limits. However, as shown in the
+acceleration plots for joints 2 to 4, the trajectory violates the
+robot's acceleration limits (red dotted lines), requiring
+post-processing to obtain a physically executable motion. In contrast,
+the NGCSTrajOpt solution (orange path) takes 8.4 seconds but
+successfully decelerates at waypoints and maintains bounded
+accelerations throughout, resulting in a dynamically feasible
+trajectory. Animations for enhanced visualization are available in the
+repository at [https://ngcs-trajopt.github.io](https://ngcs-trajopt.github.io).
+
+### 4.3.1    Planning with Task-Space Constraints
+
+<figure id="fig:ik_planning">
+    <figure id="fig:ik_start">
+        <img src="figures/iiwa_example/ik_traj_start.png" />
+        <figcaption>The robot starts in the right bin</figcaption>
+    </figure>
+    <figure id="fig:ik_goal_configuration">
+        <img src="figures/iiwa_example/ik_traj_configuration.png" />
+        <figcaption>Planning to a goal configuration</figcaption>
+    </figure>
+    <figure id="fig:ik_goal_position">
+        <img src="figures/iiwa_example/ik_traj_position.png" />
+        <figcaption>Jointly solving for IK</figcaption>
+    </figure>
+    <figcaption>Figure 9: The first image displays the robot initiating from
+    the right bin, the middle illustrates the blue trajectory resulting from
+    separately solving the inverse kinematics problem and planning to the
+    configuration. The last shows the orange trajectory, achieved by jointly
+    solving motion planning with a task space position
+    constraint.</figcaption>
+</figure>
+
+In many motion planning tasks, reaching a desired end-effector pose for
+specific grasping tasks is more important achieving specific joint
+configurations. We demonstrate how NGCSTrajOpt can jointly plan the
+trajectory and solve the inverse kinematics problem to reach a desired
+end-effector position. Figure
+[4.18](#fig:ik_planning) illustrates planning a motion from the
+right bin to the top of the shelf. We utilize fifth-order Bézier regions
+with velocity and acceleration limits and enforce continuity up to the
+second degree. Additionally, we constrain initial and final velocities
+and accelerations to zero.
+
+Figure [4.16](#fig:ik_goal_configuration) shows the blue trajectory
+obtained by planning to a goal joint configuration determined through
+external inverse kinematics. This trajectory adheres to both position
+and orientation constraints and takes 1.5 seconds. In contrast, Figure
+[4.17](#fig:ik_goal_position) shows the orange trajectory resulting
+from jointly planning the motion and solving the inverse kinematics
+problem within NGCSTrajOpt. We relaxed the orientation constraint,
+focusing solely on reaching above the shelf, and added the position
+constraint as a generic constraint to the sets at $r(s_i=1.0)$. To guide
+the optimization towards feasible solutions, we used the solution from
+the inverse kinematics as a convex surrogate, as described in Section
+[3.2.5](#section:task_space_constraints). This approach provides more
+flexibility to the motion planning problem, leading to a different and
+quicker trajectory (1.3 seconds).
+
+### 4.3.2    Avoiding Collisions in Changing Environments
+
+![Figure 10: The Kuka arm is avoiding the middle using minimum distance
+constraints, since it hasn't been captured by the iris
+regions.](figures/iiwa_example/iiwa_min_distance.png)
+
+Finally, we consider scenarios where the environment changes
+unexpectedly, making it challenging to generate a new set of
+collision-free regions on time. Figure
+[4.19](#fig:kuka_min_distance) illustrates the robot arm planning a
+trajectory around a newly fallen bin. In addition to basic velocity and
+acceleration limits, we enforce minimum distance constraints across the
+entire graph. The planner successfully navigates through the environment
+by selecting alternate paths within the GCS graph, demonstrating its
+ability to avoid getting 'stuck', a common issue with traditional
+trajectory optimization methods.
+
+## 4.4    Spot Example
+
+This section demonstrates our method on Spot [@boston_dynamics_spot], a
+quadruped robot equipped with a mounted arm, developed by Boston
+Dynamics. We showcase the planning of a manipulation task with multiple
+intermediate goals, incorporating both task-space and
+configuration-space constraints, and handling dynamic changes in the
+environment. Further, we include a high-dimensional planning problem
+involving two Spots, demonstrating the scalability of our approach to a
+50-dimensional configuration space.
+
+### 4.4.1    Planning a Multi-Stage Manipulation Task with a Floating Base
+
+![Figure 11: Simulation environment for Spot's multi-stage manipulation
+task. The environment includes shelves, a camera station and bins. The
+bottom left image shows the robot grasping the sugar box and lifting it
+in the image above. Spot scan's the retrieved box in the camera station
+shown in the top right image and dropped it off into the bin in the
+image below. The trajectory of end-effector is shown in blue, while the
+floating base trajectory is traced in
+orange.](figures/spot/spot_grasp_simple.png)
+
+Mobile manipulators, unlike their table-mounted counterparts,
+significantly expand the reachable workspace, enabling them to grasp
+objects, transport them across the environment, and interact with a
+wider range of targets. For this demonstration, we leverage Spot's
+legged locomotion, abstracting away its leg motions and commanding
+holonomic trajectories in SE(2) for the floating base. This encompassing
+planar translations, velocities, and yaw angle control. Spot's
+six-degree-of-freedom arm, coupled with a clam-shell gripper, introduces
+an additional degree of freedom, resulting in a 10-dimensional planning
+problem, while incorporating yaw angle wraparound as described in
+[@cohn2023non].
+
+Figure [4.20](#fig:spot_overview) depicts our planning scenario. The goal
+is to plan a trajectory for Spot (shown in yellow) from its initial
+configuration to the sugar box on the top rack of the left shelf. Once
+grasped, the box must be lifted to the camera scanning station in the
+background before being dropped off into the bin next to it.
+
+Since the collision-free configuration space in this scenario cannot be
+decomposed exactly, we employ the IRIS algorithm
+[@amice2022finding; @deits2015computing] to obtain an approximate
+decomposition. We manually seed regions at key configurations: the
+starting pose, the end-effector in the top and middle racks, the camera
+scanning station and both bins. This decomposition considers
+self-collisions of the arm with Spot's body, as well as collisions with
+static obstacles in the environment.
+
+![Figure 12: Sequential graph of Spot's multi-stage manipulation task.
+Blue shapes represent regions in the subgraphs, and red shapes denote
+the subspace constraints on the gray edges between the subgraphs.
+$$G_{\text{C1-3}}$$ show the collision free regions for the whole
+environment, which are internally *almost* fully
+connected.](figures/spot/spot_graph.png)
+
+The complete multi-stage task is represented by the sequential graph
+illustrated in Figure [4.21](#fig:spot_graph). We enforce velocity and acceleration bounds
+throughout the graph, as well as up to second order continuity. The
+objective function minimizes total duration and path length.
+
+We'll break down the planning process according to each stage of the
+task:
+
+**Initial configuration:** Represented by a point in the zeroth-order
+subgraph $G_{\text{start}}$, connected to $G_{\text{C1}}$, which
+contains all the collision-free regions (fifth-order Bézier curve). Zero
+velocity and acceleration constraints are imposed on the edges
+connecting $G_{\text{start}}$ to $G_{\text{C1}}$, reflecting the robot's
+initial resting state.
+
+**Grasping:** Instead of specifying a single grasping configuration, we
+introduce task-space constraints on an entire region to leverage the
+robots null space. The subgraph $G_{\text{grasping}}$ contains the
+entire collision-free region seeded at the sugar box's location,
+excluding the box itself from the IRIS region generation.
+
+-   At $s=0$, we enforce an equality constraint to ensure the gripper is
+    open and constrain the end-effector pose
+    $\prescript{W}{}{X}^{Grasp}$ in task space to ensure a proper grasp,
+    as visualized in the bottom left image of Figure
+    [4.20](#fig:spot_overview).
+    $$\begin{align}
+        f_{kin}(r(0)) = \prescript{W}{}{X}^{Grasp},\\
+        J(r(0)) \dot{r}(0) = \vec{0}\\
+        J(r(0)) \ddot{r}(0) + h\dot{J}(r(0))\dot{r}(0) = \vec{0}.
+        \end{align}$$ Since the object is initially at rest, the spatial
+    velocity and acceleration is set to zero.
+
+-   At $s=0.5$, the same task-space constraints are enforced, but the
+    gripper is closed.
+
+-   At $s=1.0$, the gripper remains closed, and the grasping position is
+    shifted five centimeters higher without zero velocity and
+    acceleration constraints, resulting in the robot lifting the box, as
+    shown in the top left image of Figure
+    [4.20](#fig:spot_overview).
+
+By enforcing end-effector constraints while allowing redundancy in the
+null space, we enable Spot's base to rotate towards the next goal during
+the lifting motion, reducing the overall path length.
+
+**Scanning Station:** After retrieving the box, Spot must pass it
+through the scanning station. This is achieved by sequentially
+connecting $G_{\text{grasping}}$, $G_{\text{C2}}$, and $G_{\text{C3}}$,
+with the edges between $G_{\text{C2}}$ and $G_{\text{C3}}$ containing
+the subspace $S_{\text{scanning}}$, which represents the configuration
+of the robot arm extended into the camera scanning station (top right
+image in Figure [4.20](#fig:spot_overview)). To minimize motion blur during
+scanning, we reduce velocity and acceleration limits within the subspace
+to a tenth of their original values. The gripper is kept closed
+throughout these subgraphs, as the gripper component of all control
+points are constrained.
+
+**Dropping off the Box:** Finally, the box is dropped off in the bin
+next to the camera station, as shown in the bottom right image of Figure
+[4.20](#fig:spot_overview). $G_{\text{C3}}$ is connected to
+$G_{\text{dropoff}}$, containing the region seeded in the drop-off
+configuration (see figure [4.21](#fig:spot_graph)). The pre-drop configuration with the gripper
+still closed is constrained via a subspace $S_{\text{pre-drop}}$ on the
+edges between $G_{\text{C3}}$ and $G_{\text{dropoff}}$.
+$G_{\text{dropoff}}$ is then connected to $G_{\text{goal}}$, which
+shares the same configuration as the pre-drop, but with an open gripper.
+The higher order subgraph $G_{\text{dropoff}}$ ensures a smooth gripper
+opening while guaranteeing zero velocity and acceleration at the final
+configuration.
+
+### 4.4.2    Adapting to Dynamic Environments
+
+![Figure 13: The simulation environment presents a new challenge with
+unexpected obstacles. A red shelf blocks the brown shelves, and various
+items clutter the racks and bins, requiring Spot to adapt its planned
+trajectory to avoid
+collisions.](figures/spot/spot_collision_environment.png)
+
+The next day, our fulfillment center presents a new challenge: a
+cluttered workspace! As shown in Figure
+[4.22](#fig:spot_collision_environment), a red shelf now obstructs
+access to the brown shelves, and several sugar boxes and mustard bottles
+occupy the racks and bin.
+
+<figure id="fig:spot_clutter_failure">
+    <figure id="fig:spot_clutter_failure_body">
+        <img src="figures/spot/spot_singulate_failure.png" />
+        <figcaption>Spot’s body collides with the shelf during the initial
+        approach.</figcaption>
+    </figure>
+    <figure id="fig:spot_clutter_failure_grasp">
+        <img src="figures/spot/spot_grap_failure.png" />
+        <figcaption>The sugar box being grasped collides with the
+        shelf.</figcaption>
+    </figure>
+    <figure id="fig:spot_clutter_failure_drop">
+        <img src="figures/spot/spot_drop_failure.png" />
+        <figcaption>Another sugar box obstructs the path as Spot moves towards
+        the drop-off bin.</figcaption>
+    </figure>
+    <figcaption>Figure 14: Collision instances encountered when executing
+    the original trajectory in the cluttered environment. The relevant
+    collision geometry is shown in red.</figcaption>
+</figure>
+
+Attempting to execute the previously planned trajectory in this
+environment would lead to collisions, as illustrated in Figure
+[4.26](#fig:spot_clutter_failure). The geometries in collision will
+be highlighted in red. During the approach, Spot's body collides with
+the red shelf (Figure
+[4.23](#fig:spot_clutter_failure_body)). When attempting to retrieve
+the sugar box, the box itself hits the shelf (Figure
+[4.24](#fig:spot_clutter_failure_grasp)), potentially causing it to
+slip from the gripper. While the final configuration remains
+collision-free, another sugar box in the bin obstructs the trajectory
+towards the drop-off configuration (Figure
+[4.25](#fig:spot_clutter_failure_drop).
+
+To handle these unforeseen obstacles, we introduce minimum distance
+constraints within the relevant subgraphs. Specifically, constraints are
+added to $G_{\text{C1}}$ to prevent collisions between Spot and the new
+obstacles. Furthermore, to account for potential collisions between the
+grasped object and the environment, we attach a collision sphere to the
+end-effector and include corresponding minimum distance constraints in
+subgraphs $G_{\text{C2}}$ and $G_{\text{C3}}$, as illustrated in Figure
+[4.27](#fig:spot_clutter_collision).
+
+<figure id="fig:spot_clutter_collision">
+    <figure>
+        <img src="figures/spot/spot_grap_collision.png" />
+        <figcaption>The collision sphere ensures sufficient clearance from the
+        shelf while grasping the sugar box.</figcaption>
+    </figure>
+    <figure>
+        <img src="figures/spot/spot_drop_collision.png" />
+        <figcaption>The sphere helps prevent collisions with the other sugar
+        boxes during the drop-off phase.</figcaption>
+    </figure>
+    <figcaption>Figure 15: The collision geometries considered by the
+    minimum distance constraints are shown in red.</figcaption>
+</figure>
+
+<figure id="fig:spot_clutter_success">
+    <figure id="fig:spot_clutter_success_body">
+        <img src="figures/spot/spot_singulate_clutter.png" />
+        <figcaption>Spot avoids the blue shelf by repositioning its body while
+        maintaining the desired grasp location.</figcaption>
+    </figure>
+    <figure id="fig:spot_clutter_success_grasp">
+        <img src="figures/spot/spot_grap_cluttered.png" />
+        <figcaption>The arm lifts the sugar box over the shelf without
+        collision.</figcaption>
+    </figure>
+    <figure id="fig:spot_clutter_success_drop">
+        <img src="figures/spot/spot_drop_clutter.png" />
+        <figcaption>As Spot drops the sugar box into the bin among other
+        objects, it remains collision free.</figcaption>
+    </figure>
+    <figcaption>Figure 16: Spot successfully navigates the cluttered
+    environment by leveraging minimum distance constraints.</figcaption>
+</figure>
+
+The flexibility provided by the end-effector constraints in
+$G_{\text{grasping}}$ allows the minimum distance constraints to adjust
+Spot's body position while maintaining the desired grasp location.
+Figure [4.28](#fig:spot_clutter_success_body) shows how Spot repositions
+itself further away from the shelf, extending its arm to reach the
+grasping pose. Figure
+[4.29](#fig:spot_clutter_success_grasp) demonstrates the arm lifting
+the sugar box over the shelf without colliding. Finally, during the
+drop-off phase, the sugar boxes remain collision free while singulating
+the box into the bin, as seen in Figure
+[4.30](#fig:spot_clutter_success_drop).
+
+To further enhance robustness in highly cluttered environments, we can
+replace the fixed goal configuration with an end-effector position
+constraint with liberal bounds. This would allow the drop-off location
+to vary as more objects are added to the bin.
+
+### 4.4.3    Planning in All Degrees of Freedom
+
+While Spot's API provides a convenient abstraction of the legs, allowing
+us to plan in floating base coordinates, we demonstrate the scalability
+of our method by planning in the full configuration space, encompassing
+all degrees of freedom. This includes three degrees of freedom for each
+leg, six for the floating base (using Euler rotations), and seven for
+the arm, including the gripper. For two Spots, this results in a
+50-dimensional planning problem.
+
+Our goal is to plan a collision-free trajectory for two robots that
+reach between each other's legs, close their grippers, and move their
+arms to their backs, mimicking a grasping and transfer motion.
+
+We utilize IRIS to generate collision-free regions, taking into account
+the full configuration space of both robots. To ensure meaningful
+regions for this complex task, we manually seed the regions by
+teleoperating the robots' bases and arms via inverse kinematics. During
+teloperation, we impose position constraints on the feet to ensure they
+remain stationary and a polytopic constraint on the center of mass to
+keep it within the support polygon.
+
+<figure id="fig:spot_bimanual">
+<figure>
+{/* <p><img src="figures/spot/spot_bimanual_0.png" alt="image" /> <img
+src="figures/spot/spot_bimanual_4.png" alt="image" /></p> */}
+</figure>
+<figure>
+{/* <p><img src="figures/spot/spot_bimanual_1.png" alt="image" /> <img
+src="figures/spot/spot_bimanual_5.png" alt="image" /></p> */}
+</figure>
+<figure>
+{/* <p><img src="figures/spot/spot_bimanual_2.png" alt="image" /> <img
+src="figures/spot/spot_bimanual_6.png" alt="image" /></p> */}
+</figure>
+<figure>
+{/* <p><img src="figures/spot/spot_bimanual_3.png" alt="image" /> <img
+src="figures/spot/spot_bimanual_7.png" alt="image" /></p> */}
+</figure>
+<figcaption>Figure 17: Coordinated motion planning for two Spot robots
+in a 50-dimensional configuration space. The blue and orange
+trajectories represent the end-effector paths of the two robots. The
+images depict snapshots of the planned motion, read from left to right,
+top to bottom. The robots start in an initial configuration (top left),
+reach between each other’s legs (top right), close their grippers, and
+move their arms to their backs (bottom right). The feet remain
+stationary throughout the motion. </figcaption>
+</figure>
+
+Figure [4.32](#fig:spot_bimanual) shows the planned motion. The robots
+start in an initial configuration (top left image) and move to a
+configuration where their arms reach under each other's bases (top right
+image). They then close their grippers and move their arms above their
+backs (bottom right image), simulating a handover motion. The figure
+depicts the traced end-effector trajectories, with blue corresponding to
+the nearer robot and orange to the robot in the back. Throughout the
+motion, the feet remain stationary, achieved by enforcing position
+constraints on all eight feet centers, as described in
+Section [3.2.5](#section:task_space_constraints).
+These position constraints,
+similar to the minimum distance constraints discussed in
+Section [3.2.4](#section:collision_avoidance), are enforced at multiple
+sample points along the trajectory segment within each region,
+determined by the size of the collision-free set.
+
+<figure id="fig:spot_bimanual_highlight">
+    <figure>
+        <img src="figures/spot/spot_bimanual_special_0.png" />
+        <figcaption>Side view</figcaption>
+    </figure>
+    <figure>
+        <img src="figures/spot/spot_bimanual_special_3.png" />
+        <figcaption>Top view</figcaption>
+    </figure>
+    <figcaption>Figure 18: Collision-free grasping configuration for two
+    Spot robots, demonstrating coordinated motion planning in a
+    50-dimensional configuration space. The robots reach under each other’s
+    bodies without colliding.</figcaption>
+</figure>
+
+Figure [4.33](#fig:spot_bimanual_highlight) provides a closer look at the
+grasping configuration from different angles, highlighting that the
+robots are not colliding.
+
+It is important to note that in this high-dimensional scenario (50
+degrees of freedom) with manually seeded regions, finding a trajectory
+took approximately 15 minutes. We used eleven regions, with an average
+of 2530 hyperplanes defining each region. Planning with fourth-order
+Bézier curves results in five control points per region, resulting in a
+total of 138,990 constraints per subgraph to ensure collision avoidance
+between the robots and themselves.
+
+To address the computational challenges posed by such high-dimensional
+planning, @jiang2024simplifying are developing methods for polytopic
+simplification by creating inner approximations of the collision-free
+sets. These simplifications could be applied at different levels of
+fidelity. Using coarser approximations for the GCS relaxation, which
+considers all regions, can significantly speed up the global search. For
+the restriction stage, which typically involves optimizing over a
+smaller subset of vertices corresponding to the selected path, finer
+approximations can be used to preserve important details of the
+configuration space and avoid overly conservative solutions.

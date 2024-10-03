@@ -1,0 +1,30 @@
+<div style={{ textAlign: 'center', lineHeight: "1.4", margin: '0', padding: '0', fontSize: '18px' }}>
+  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+    Guiding Nonconvex Trajectory Optimization with<br />Hierarchical Graphs of Convex Sets
+  </div>
+
+  <div style={{ marginTop: '40px'}}>
+    by<br />
+    <div style={{ marginTop: "10px", marginBottom: "10px", fontSize: '20px'}}>
+    David von Wrangel<br />
+    </div>
+    Submitted to the Department of Electrical Engineering and Computer Science<br />
+    on May 10, 2024 in partial fulfillment of the requirements for the degree of<br />
+  </div>
+
+  <div style={{ marginTop: '30px' }}>
+    MASTER OF ENGINEERING IN ELECTRICAL ENGINEERING AND COMPUTER SCIENCE
+  </div>
+
+  <div id="abstract" style={{ marginTop: '60px', textAlign: 'left', marginLeft: '20px', marginRight: '20px' }}>
+    <strong>ABSTRACT</strong><br />
+    <div style={{marginTop: '10px', textIndent: '2em', textAlign: 'justify'}}>
+    Collision-free motion planning with trajectory optimization is inherently nonconvex. Some of this nonconvexity is fundamental: the robot might need to make a discrete decision to go left around an obstacle or right around an obstacle. Some of this nonconvexity is potentially more benign: we might want to penalize high-order derivatives of our continuous trajectories in order to encourage smoothness. Recently, Graphs of Convex Sets (GCS) have been applied to trajectory optimization, addressing the fundamental nonconvexity with efficient online optimization over a "roadmap" represented by an approximate convex decomposition of the configuration space. In this thesis, we explore some of the most useful nonconvex costs and constraints and introduce a novel hierarchical GCS structure, composing subgraphs that represent different task phases or alternative paths and enabling efficient planning for complex tasks involving both discrete decision-making and continuous trajectory generation. We investigate the suitability of combining convex "global" optimization using GCS with nonconvex trajectory optimization for rounding the local solutions. Through extensive experiments on diverse robotic systems, we demonstrate that this combination can effectively guide a small number of nonconvex optimizations, ultimately finding high-quality solutions to challenging nonconvex motion planning problems.
+    </div>
+  </div>
+
+  <div style={{ marginTop: '40px', textAlign: 'left', marginLeft: '20px', marginRight: '20px' }}>
+    Thesis supervisor: Russ Tedrake<br />
+    Title: Toyota Professor of EECS, Aero/Astro, MechE
+  </div>
+</div>

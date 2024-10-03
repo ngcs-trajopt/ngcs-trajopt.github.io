@@ -1,0 +1,69 @@
+# Contents
+
+[Abstract](#abstract)
+
+[Acknowledgments](#acknowledgments)
+
+[1 Introduction](#introduction)
+
+[2  Background](#background)
+
+>[2.1 Trajectory Optimization for Motion Planning](#trajectory-optimization-for-motion-planning)
+
+>[2.2 The Challenges of Nonconvexity](#the-challenges-of-nonconvexity)
+
+>[2.3 Graphs of Convex Sets (GCS)](#graphs-of-convex-sets-(GCS))
+
+[3 Using Graphs of Convex Sets to Guide Nonconvex Trajectory Optimization](#using-graphs-of-convex-sets-to-guide-nonconvex-trajectory-optimization)
+
+>[3.1 High-Level Approach](#high-level-approach)
+
+>[3.2 Nonlinear extension to GCS Trajectory Optimization](#nonlinear-extension-to-GCS-trajectory-optimization)
+
+>>[3.2.1 Minimizing path duration, length, and smoothness](#minimizing-path-duration,-length,-and-smoothness)
+>>
+>>[3.2.2 Derivative Constraints](#derivative-constraints)
+>>
+>>[3.2.3 Continuity](#continuity)
+>>
+>>[3.2.4 Collision Avoidance](#collision-avoidance)
+>>
+>>[3.2.5 Task Space Constraints](#task-space-constraints)
+
+>[3.3 Multimodal Planning with Hierarchical Graph Structures](#multimodal-planning-with-hierarchical-graph-structures)
+
+>>[3.3.1 Subgraphs and Subspaces](#subgraphs-and-subspaces)
+
+>>[3.3.2 Sequential and Parallel Subgraphs](#sequential-and-parallel-subgraphs)
+
+>>[3.3.3 Utilizing Subgraphs as Start and Goal Regions](#utilizing-subgraphs-as-start-and-goal-regions)
+
+[4 Application](#application)
+
+>[4.1 Two Dimensional Example](#two-dimensional-example)
+
+>>[4.1.1 Comparison of Post-processing with NGCSTrajOpt](#comparison-of-post-processing-with-NGCSTrajOpt)
+
+>>[4.1.2 Planning through Hierarchical Graphs](#planning-through-hierarchical-graphs)
+
+>[4.2 Quadrotor Example](#quadrotor-example)
+>
+>[4.3 Manipulation Example](#manipulation-example)
+
+>>[4.3.1 Planning with Task-Space Constraints](#planning-with-task-space-constraints)
+>>
+>>[4.3.2 Avoiding Collisions in Changing Environments](#avoiding-collisions-in-changing-environments)
+
+>[4.4 Spot Example](#spot-example)
+
+>>[4.4.1 Planning a Multi-Stage Manipulation Task with a Floating Base](#planning-a-multi-stage-manipulation-task-with-a-floating-base)
+>>
+>>[4.4.2 Adapting to Dynamic Environments](#adapting-to-dynamic-environments)
+>>
+>>[4.4.3 Planning in All Degrees of Freedom](#planning-in-all-degrees-of-freedom)
+
+>[5 Conclusion](#conclusion)
+
+>>[5.1 Future Directions](#future-directions)
+
+[References](#references)

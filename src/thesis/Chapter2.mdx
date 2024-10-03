@@ -1,0 +1,134 @@
+# Background
+
+This chapter establishes the context and foundational knowledge
+necessary for understanding the contributions of this thesis. We begin
+by reviewing trajectory optimization and its significance in robot
+motion planning. We then delve into the challenges of nonconvexity in
+this domain, highlighting the limitations of conventional techniques.
+Finally, we introduce the Graphs of Convex Sets (GCS) framework as a
+powerful tool for addressing these challenges, paving the way for the
+novel methods presented in this thesis.
+
+## 2.1    Trajectory Optimization for Motion Planning
+
+Trajectory optimization is a fundamental approach in robot motion
+planning, aiming to generate dynamically feasible, time-parameterized
+motions that satisfy given constraints while optimizing for desired
+objectives
+[@diehl2006fast; @augugliaro2012generation; @schulman2014motion; @majumdar2017funnel; @zhang2020optimization].
+It seeks to find an open-loop control solution, represented as a
+time-varying trajectory, that is optimal for a specific initial
+condition.
+
+Trajectory optimization problems are typically formulated as
+mathematical optimization programs, where the decision variables
+represent the robot's state and control inputs over time. The objective
+function often encodes metrics such as time, energy consumption, or path
+length, while constraints ensure the trajectory adheres to physical
+limitations like joint limits, velocity bounds, and collision avoidance.
+
+Solving these optimization problems generally involves discretizing the
+continuous-time trajectory using techniques like piecewise polynomials
+or basis functions. The resulting optimization program can then be
+solved using various techniques, including nonlinear programming
+methods.
+
+However, the presence of nonconvex constraints, such as those arising
+from collision avoidance or nonlinear system dynamics, can make it
+challenging to find globally optimal solutions. Traditional trajectory
+optimization methods, which rely on local optimization algorithms, are
+susceptible to getting trapped in local minima, leading to suboptimal or
+even infeasible trajectories. This underscores the need for techniques
+that can effectively navigate the nonconvexities inherent in many robot
+motion planning problems.
+
+## 2.2    The Challenges of Nonconvexity
+
+Obstacles in the environment, and kinematic or dynamic constraints often
+introduce nonconvexities into a robot's configuration space or, more
+generally, into the space of feasible trajectories. This nonconvexity
+poses a significant challenge for traditional trajectory optimization
+methods.
+
+Local optimization algorithms, commonly used to solve trajectory
+optimization problems, are fundamentally limited in their ability to
+handle nonconvexity. They tend to converge to local minima, which may be
+far from the globally optimal solution. In the context of motion
+planning, this can lead to trajectories that are unnecessarily long,
+inefficient, or even fail to find any feasible trajectory.
+
+Sampling-based methods
+[@karaman2011sampling; @gammell2014informed; @janson2015fast], such as
+Rapidly-exploring Random Trees (RRT), offer an alternative approach for
+handling nonconvexity. These methods construct graphs by randomly
+sampling the robot's configuration space. RRT incrementally builds a
+tree by iteratively extending it towards randomly sampled
+configurations, while Probabilistic RoadMaps (PRM) generate a graph by
+connecting nearby feasible configurations.
+
+While probabilistically complete, meaning they will eventually find a
+feasible path if one exists, these methods often struggle to find
+optimal paths. Moreover, generating smooth, dynamically feasible
+trajectories that satisfy additional constraints, especially those
+involving higher-order derivatives, remains a challenge for these
+methods.
+
+The limitations of traditional trajectory optimization methods in
+handling nonconvexity highlight the need for alternative approaches.
+These approaches should be capable of effectively navigating the
+nonconvex search space, exploring multiple path homotopies, and
+ultimately finding high-quality solutions that satisfy the desired
+constraints and objectives.
+
+## 2.3    Graphs of Convex Sets (GCS)
+
+The Graphs of Convex Sets (GCS) framework [@marcucci2024shortest] offers
+a powerful approach for addressing mixed discrete and continuous
+optimization problems, particularly in the context of motion planning
+[@marcucci2023motion]. It provides a structured representation of the
+robot's configuration space as a graph, where:
+
+-   **Vertices:** Each vertex corresponds to a convex, collision-free
+    region in the configuration space. For trajectory optimization, a
+    vertex contains multiple control points defining a Bézier curve
+    segment within that region, along with a duration scaling variable
+    that determines the time spent traversing the segment.
+
+-   **Edges:** Edges connect vertices whose corresponding regions
+    intersect, indicating a feasible transition. Continuity constraints
+    on the Bézier curves and their derivatives enforce smooth
+    transitions between regions.
+
+The key strength of GCS lies in its ability to formulate the motion
+planning problem as a single, unified optimization program that
+simultaneously addresses both the discrete and continuous aspects of the
+problem.
+
+The discrete aspect involves selecting a path through the graph, which
+corresponds to choosing a sequence of convex regions to traverse. The
+continuous aspect involves optimizing the shape and timing of the
+trajectory within each region, determined by the control points of the
+Bézier curves and the duration scaling variables.
+
+This optimization can be naturally formulated as a mixed-integer convex
+program. However, previous mixed-integer formulations for similar
+problems have proven extremely inefficient. The GCS framework, in
+contrast, provides a remarkably efficient representation.
+@marcucci2023motion further introduced a tight convex relaxation and a
+cheap rounding strategy to solve the problem even more efficiently as a
+convex program. By relaxing the binary variables that indicate edge
+selection into continuous flows, and by employing perspective operators
+to scale the costs and constraints accordingly, the resulting convex
+relaxation yields a solution where these flows can be interpreted as
+edge probabilities. A randomized rounding strategy, guided by these edge
+probabilities, is then used to identify a small set of promising
+discrete paths. These paths are then optimized independently, leveraging
+the continuous optimization capabilities of GCS to recover a final
+collision-free trajectory.
+
+This approach enables the efficient exploration of multiple path
+homotopies, avoiding local minima that often plague traditional
+trajectory optimization methods. The GCS framework effectively blends
+the combinatorial power of graph search with the expressiveness of
+continuous trajectory optimization, offering a promising direction for
+addressing complex motion planning problems in robotics.

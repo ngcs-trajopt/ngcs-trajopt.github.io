@@ -1,0 +1,93 @@
+# Conclusion
+
+This thesis has presented a novel approach for addressing nonconvex
+trajectory optimization problems by building upon the Graphs of Convex
+Sets (GCS) framework. Our primary focus has been integrating nonconvex
+constraints, such as dynamic limits, task space constraints and local
+collision avoidance, while preserving the global optimization advantages
+of GCS. To achieve this, we have utilized carefully crafted convex
+surrogates for nonconvex constraints, enabling efficient convex
+optimization to guide the global search. The solutions obtained from
+this convex relaxation are then refined using nonconvex optimization in
+a parallelized rounding process, ensuring the final trajectories satisfy
+the original nonconvex constraints. This hybrid approach enables the
+generation of smooth, dynamically feasible trajectories that can satisfy
+a wider range of constraints compared to traditional GCS methods.
+
+Furthermore, we have introduced a hierarchical graph structure to
+enhance the expressiveness of GCS Trajectory Optimization, allowing for
+the representation of complex robotic tasks. This structure accommodates
+sequential goals, and decision-making between alternative paths for task
+and motion planning. Through this hierarchical representation, we can
+plan continuous trajectories while simultaneously reasoning about
+discrete decisions.
+
+We have evaluated our method on diverse robotic systems, including
+quadrotors, manipulators, and legged mobile manipulators, demonstrating
+its effectiveness in planning challenging motions. The results highlight
+the method's ability to generate minimum-snap trajectories for
+quadrotors, respect task-space constraints for manipulators, and plan
+multi-stage manipulation tasks for mobile robots with a floating base.
+Furthermore, our approach has shown promise in handling dynamic
+environments by adapting to unforeseen obstacles using minimum distance
+constraints.
+
+## 5.1    Future Directions
+
+This work contributes to the field of robotic motion planning by
+offering a framework for tackling jointly discrete and continuous
+complex planning problems. The integration of nonconvex optimization
+with GCS aims to expand the scope of addressable tasks, allowing for the
+generation of more efficient and realistic robot motions. However,
+several promising research avenues remain to be explored:
+
+**Legged Locomotion and Footstep Planning:** For legged robots, planning
+directly in foot positions rather than joint positions offers a more
+powerful mechanism for enforcing foothold constraints. While task-space
+position constraints can be imposed at set intervals, they cannot
+guarantee that a foot remains perfectly stationary throughout a
+trajectory. By employing analytical inverse kinematics
+[@cohn2023constrained] to relate foot positions to the base
+configuration, we gain the ability to impose constraints that ensure
+specific feet remain stationary while allowing the base to move, tilt,
+and roll.
+
+This concept naturally extends to integrate footstep planning into the
+framework. By associating footholds with specific regions in the
+environment, we can leverage GCS to optimize both footstep placement and
+continuous base motions. Employing the quasi-static contact model in GCS
+introduced by @graesdal2024towards, the planner could reason about
+contact forces and potentially be extended via centroidal dynamics
+[@orin2013centroidal] to ensure a dynamically feasible gait, even in
+challenging environments.
+
+**Automatic Convex Decomposition:** Existing decomposition algorithms
+like IRIS-NP [@petersen2023growing] require manual seeding of regions,
+demanding substantial time and expertise. Automating this process is
+crucial for wider adoption of GCS-based planning. The clique cover
+method [@werner2023approximating] offers a promising direction,
+automatically identifying clusters of mutually visible configurations
+for polytope generation. However, in high-dimensional configuration
+spaces, uniform sampling may miss critical regions, such as those where
+the robot interacts with objects or navigates through tight spaces.
+Developing effective sampling strategies, potentially leveraging machine
+learning or task-specific heuristics, could prioritize these regions,
+using inverse kinematics to sample relevant configurations. This would
+accelerate decomposition and broaden the applicability of GCS-based
+planning.
+
+**Integration with Perception:** Integrating our method with robust
+perception pipelines for obstacle detection can bridge the gap between
+planning and execution. In particular, handling dynamic environments
+necessitates perceiving newly introduced obstacles. We can leverage
+lidar sensors and point clouds, employing primitive fitting or learned
+signed distance fields [@park2019deepsdf] to represent newly introduced
+obstacles for collision avoidance. Incorporating real-time perception
+data enables the planner to adapt to changing environments, ensuring
+robust and collision-free execution of planned trajectories.
+
+The combination of GCS and nonlinear optimization, as investigated in
+this thesis, represents a step toward more powerful robot motion
+planning. Continuing to explore the future directions outlined above
+holds the potential to enhance the capabilities of robots, allowing them
+to operate more effectively in complex and dynamic environments.
