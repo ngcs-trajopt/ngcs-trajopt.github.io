@@ -103,20 +103,20 @@ path is fixed, and it only optimizes for time.
 
 <figure id="fig:2d_subgraphs">
     <div style={{display: 'flex', flexDirection:"row", textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-    <figure id="fig:inter_gcs" style={{flex: '1 1 45%', minWidth: '300px', margin: '10px'}}>
-        <div style={{display: 'flex', flexDirection:"row", alignItems:"center"}}>
+    <figure id="fig:inter_gcs" style={{flex: '1 1 300px', margin: '10px'}}>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
             <Suspense fallback={null}>
-            <img src="figures/two_dimensional_example/intermediate_traj.png" style={{height: '200px', width: 'auto', objectFit: 'contain'}} />
-            <img src="figures/two_dimensional_example/intermediate_derivatives.png" style={{height: '200px', width: 'auto', objectFit: 'contain'}} />
+                <img src="figures/two_dimensional_example/intermediate_traj.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
+                <img src="figures/two_dimensional_example/intermediate_derivatives.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
             </Suspense>
         </div>
         <figcaption>(a) Planning through Subspaces</figcaption>
     </figure>
-    <figure id="fig:multi_gcs" style={{flex: '1 1 45%', minWidth: '300px', margin: '10px'}}>
-        <div style={{display: 'flex', flexDirection:"row",alignItems:"center"}}>
+    <figure id="fig:multi_gcs" style={{flex: '1 1 300px', margin: '10px'}}>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
             <Suspense fallback={null}>
-            <img src="figures/two_dimensional_example/multi_start_traj.png" style={{height: '200px', width: 'auto', objectFit: 'contain'}} />
-            <img src="figures/two_dimensional_example/multi_start_derivatives.png" style={{height: '200px', width: 'auto', objectFit: 'contain'}} />
+                <img src="figures/two_dimensional_example/multi_start_traj.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
+                <img src="figures/two_dimensional_example/multi_start_derivatives.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
             </Suspense>
         </div>
         <figcaption>(b) Multi Start/Goal Planning</figcaption>
