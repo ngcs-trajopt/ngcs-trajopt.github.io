@@ -1,3 +1,5 @@
+import {Suspense} from 'react';
+
 # Using Graphs of Convex Sets to Guide Nonconvex Trajectory Optimization
 
 ## 3.1    High-Level Approach
@@ -135,21 +137,20 @@ functions which directly optimize a weighted sum of the total path
 duration, and convex surrogates for path length and a path velocity
 regularization. We use the same objectives here, and add additional
 support for penalizing the higher derivatives of the trajectory:
-$$\text{minimize}\quad aT + b L(r) + \sum_{n=2}^N c_n D(r,h,n)
-\label{eq:objective}$$ Here $a$, $b$, and $c_n$ are user-specified
+$$\text{minimize}\quad aT + b L(r) + \sum_{n=2}^N c_n D(r,h,n)$$
+Here $a$, $b$, and $c_n$ are user-specified
 positive scalar weights. These weights represent the importance given to
 the trajectory duration, $T,$ path length, $L(r),$ and regularization of
 the nth order derivative $D(r,h, n),$ respectively.
 
 Minimizing trajectory duration is achieved by considering the convex
 cost associated with minimizing each individual segment's duration's
-($h_i$): $$T = \sum_{i \in \mathcal I} h_i.
-\label{eq:time_cost}$$
+($h_i$): $$T = \sum_{i \in \mathcal I} h_i.$$
 
 To minimize path length, we minimize the cumulative length between
 control points of each Bézier curve ($r_i$):
-$$L(r_i) = \sum_{k=0}^{d-1} |r_{i,k+1} - r_{i,k} |_2.
-\label{eq:path_length_cost}$$ This provides an upper bound on path
+$$L(r_i) = \sum_{k=0}^{d-1} |r_{i,k+1} - r_{i,k} |_2.$$
+This provides an upper bound on path
 length and avoids unnecessary numerical integration while maintaining
 convexity.
 
@@ -157,8 +158,8 @@ Finally, to promote smoothness, we can minimize the trajectory's
 higher-order derivatives. We achieve this by minimizing the squared
 distance between control points of the Nth minus one derivative of
 $r(s)$, normalized by the duration:
-$$D (r,h,n) = \frac{1}{h} \sum_{k=0}^{d-n} \left| \frac{d^{n-1}r_{i,k+1}}{ds^{n-1}} - \frac{d^{n-1}r_{i,k}}{ds^{n-1}}\right|_2^2.
-\label{eq:path_derivative_cost}$$ This expression remains convex for
+$$D (r,h,n) = \frac{1}{h} \sum_{k=0}^{d-n} \left| \frac{d^{n-1}r_{i,k+1}}{ds^{n-1}} - \frac{d^{n-1}r_{i,k}}{ds^{n-1}}\right|_2^2.$$
+This expression remains convex for
 $h > 0$. This is an approximation for regularizing the true time
 derivative, $\frac{d^nq(t)}{dt^n}$, which involves a term of $h^{n}$ in
 the denominator. While this true nonconvex cost could be directly
@@ -170,12 +171,9 @@ relaxation and the rounding.
 
 By combining these sub-objectives, we can concurrently optimize for
 trajectory duration
-[\[eq:time_cost\]](#eq:time_cost){reference-type="eqref"
-reference="eq:time_cost"}, path length
-[\[eq:path_length_cost\]](#eq:path_length_cost){reference-type="eqref"
-reference="eq:path_length_cost"}, and smoothness
-[\[eq:path_derivative_cost\]](#eq:path_derivative_cost){reference-type="eqref"
-reference="eq:path_derivative_cost"}, tailoring the optimization to
+[\[eq:time_cost\]](#eq:time_cost), path length
+[\[eq:path_length_cost\]](#eq:path_length_cost), and smoothness
+[\[eq:path_derivative_cost\]](#eq:path_derivative_cost), tailoring the optimization to
 specific task requirements.
 
 ### 3.2.2    Derivative Constraints
@@ -189,36 +187,36 @@ Bézier curve is also a Bézier curve. This allows us to impose linear
 constraints on the control points of the path, guaranteeing that
 velocity limits are respected throughout the entire trajectory. Here
 $\mathcal V$ is a convex set of the allowable velocities.
-$$\begin{align}
-\label{eq:velocity_constraint}
-\dot r(s) \in h \mathcal V.
-\end{align}$$ However, constraints on higher-order derivatives, such as
+$$\begin{align} \label{eq:velocity_constraint} \dot r(s) \in h \mathcal V. \end{align}$$
+
+However, constraints on higher-order derivatives, such as
 acceleration, are inherently nonlinear due to the relationship between
 path derivatives and time scaling:
-$$\frac{d^N q(t)}{dt^N} = \frac{d^N r(s)/ds^N}{h^N}.
-\label{eq:nonlinear_acceleration}$$
+$$\frac{d^N q(t)}{dt^N} = \frac{d^N r(s)/ds^N}{h^N}. \label{eq:nonlinear_acceleration}$$
 
-![Figure 1: Convex Approximations of 1D acceleration limits. The filled
+<figure id="fig:mcCormick" style={{display:'flex', alignSelf: 'center', alignItems:"center", flexDirection: 'column'}}>
+<Suspense fallback={null}>
+<img style={{width:"300px"}} src="figures/math/mcCormickEnvelope.png"/>
+</Suspense>
+<figcaption>Figure 1: Convex Approximations of 1D acceleration limits. The filled
 gray area represents the feasible set of the nonlinear constraint. The
 blue line represents a McCormick envelope, a convex relaxation of the
 original constraint. The red lines illustrate a tighter piecewise
 envelope. The orange line shows a simpler
-approximation.](figures/math/mcCormickEnvelope.png){#fig:mcCormick
-width="40%"}
+approximation.</figcaption>
+</figure>
 
 For example, consider a 1D path with acceleration $x$ and limits \[-1,
 1\]. The nonlinear constraint is: $$-1 \leq \frac{x}{h^2} \leq 1.
 \label{eq:simple_1d_acceleration}$$ The feasible set is highlighted in
-gray in Figure [3.1](#fig:mcCormick){reference-type="ref"
-reference="fig:mcCormick"}.
+gray in Figure [3.1](#fig:mcCormick)
 
 The McCormick envelope for this constraint, considering the range of $h$
 between $h_{min}$ and $h_{max}$, can be constructed using the following
 inequalities:
-$$h^N \leq \frac{h_{max}^N - h_{min}^N}{h_{max} - h_{min}}h + \frac{h_{max}h_{min}^N - h_{min}h_{max}^N}{h_{max} - h_{min}}.
-\label{eq:mcCormick_bound}$$ The single McCormick envelope using
-[\[eq:mcCormick_bound\]](#eq:mcCormick_bound){reference-type="eqref"
-reference="eq:mcCormick_bound"} is shown as a blue line. Alternatively,
+$$h^N \leq \frac{h_{max}^N - h_{min}^N}{h_{max} - h_{min}}h + \frac{h_{max}h_{min}^N - h_{min}h_{max}^N}{h_{max} - h_{min}}.\label{eq:mcCormick_bound}$$
+The single McCormick envelope using
+[\[eq:mcCormick_bound\]](#eq:mcCormick_bound) is shown as a blue line. Alternatively,
 we could choose to copy a configuration space region into e.g. separate
 slow, normal, and fast regions, shown in red. We can use the discrete
 machinery in GCS to enable these tighter piecewise-McCormick envelopes,
@@ -226,8 +224,8 @@ but at the cost of increasing the size of the graph and the solve times.
 
 Alternatively, we use a simpler linear approximation, where $\mathcal D$
 is a convex set with the allowable derivatives:
-$$\frac{d^N r(s)}{ds^N} \in h_0^{N-1} h \mathcal D,
-\label{eq:linearized_acceleration_constraint}$$ where $h_0$ is a
+$$\frac{d^N r(s)}{ds^N} \in h_0^{N-1} h \mathcal D,\label{eq:linearized_acceleration_constraint}$$
+where $h_0$ is a
 characteristic time constant. While this approximation is less tight
 than the piecewise-McCormick envelope and too conservative for large
 accelerations, it is often sufficient for guiding the optimization and
@@ -236,8 +234,7 @@ can be computationally more efficient.
 Regardless of the chosen approximation, we refine the solution during
 the rounding stage using nonlinear optimization to ensure that the final
 trajectory strictly satisfies the original nonlinear acceleration
-constraints: $$\frac{d^Nr(s)}{ds^N} \in h^N \mathcal D.
-\label{eq:derivative_constraint}$$
+constraints: $$\frac{d^Nr(s)}{ds^N} \in h^N \mathcal D.\label{eq:derivative_constraint}$$
 
 ### 3.2.3    Continuity
 
@@ -249,25 +246,22 @@ Bézier curve: $r_{i,0} = r_i(0)$ and $r_{i+1,d} = r_{i+1}(S)$.
 
 Zero-order continuity (position continuity) is achieved by requiring the
 initial and terminal points of consecutive Bézier curves to be equal:
-$$r_{k,d} = r_{k+1,0}.
-\label{eq:zero_order_continuity}$$ This guarantees that the robot's path
+$$r_{k,d} = r_{k+1,0}.\label{eq:zero_order_continuity}$$ This guarantees that the robot's path
 is continuous without any teleportation.
 
 To avoid sudden changes in velocity and acceleration, we can enforce
 higher-order continuity. The rounding problem receives these nonconvex
 equality constraint that relate the derivatives of consecutive Bézier
-curves: $$\label{eq:higher_order_continuity}
-\frac{d^Nr_{k,d}}{ds^N}h_{k+1}^N = \frac{d^Nr_{k+1,0}}{ds^N}h_k^N.$$ We
+curves: $$\label{eq:higher_order_continuity} \frac{d^Nr_{k,d}}{ds^N}h_{k+1}^N = \frac{d^Nr_{k+1,0}}{ds^N}h_k^N.$$ We
 introduce a convex surrogate by replacing the time scaling variables
 with a constant value ($h_0$) for each region:
-$$\label{eq:convex_higher_order_continuity}
-\frac{d^Nr_{k,d}}{ds^N}h_{0, k+1}^N = \frac{d^Nr_{k+1,0}}{ds^N}h_{0,k}^N.$$
+$$\label{eq:convex_higher_order_continuity} \frac{d^Nr_{k,d}}{ds^N}h_{0, k+1}^N = \frac{d^Nr_{k+1,0}}{ds^N}h_{0,k}^N.$$
 In practice, we typically set $h_0$ to one, effectively enforcing
 continuity on the path variable $r(s)$. However, depending on the
 specific problem and prior knowledge about set sizes and velocity
 bounds, a different constant value might be more suitable.
 
-### 3.2.4    Collision Avoidance {#section:collision_avoidance}
+### 3.2.4    Collision Avoidance
 
 For static obstacles, we leverage the convex hull property of Bézier
 curves. We assign a collision-free set ($\mathcal Q_i$) to each vertex
@@ -289,8 +283,7 @@ possible scenarios is impractical. Instead, we utilize minimum distance
 constraints during the rounding stage. Let $R_k(r(s_i))$ represent the
 geometry of the $k$-th link of the robot at sample point $s_i$, and
 $O_j$ represent the geometry of the $j$-th object in the environment. We
-enforce the following constraint: $$\label{eq:min_distance}
-\min_{x \in R_k(r(s_i)), y \in O_j} | x - y |_2 \geq d_{\text{min}}, \hspace{25pt} \forall (j, k) \in \mathcal{C}, \forall s_i \in S_I,$$
+enforce the following constraint: $$\label{eq:min_distance} \min_{x \in R_k(r(s_i)), y \in O_j} | x - y |_2 \geq d_{\text{min}}, \hspace{25pt} \forall (j, k) \in \mathcal{C}, \forall s_i \in S_I,$$
 where $\mathcal{C}$ represents the set of all collision pairs between
 robot links and environment objects.
 
@@ -307,8 +300,7 @@ Although we cannot easily enforce that these constraints are satisfied
 for the entire trajectory, we enforce them at a finite set of subsamples
 in each region. To choose the number of subsamples, we provide a tunable
 step size and use a simple heuristic (Algorithm
-[\[alg:max_dist_polyhedra\]](#alg:max_dist_polyhedra){reference-type="ref"
-reference="alg:max_dist_polyhedra"}) to estimate the length of each
+[\[alg:max_dist_polyhedra\]](#alg:max_dist_polyhedra)}) to estimate the length of each
 convex region. This heuristic samples a random linear cost from a
 Gaussian distribution and uses it to find the points within the
 polyhedron that are farthest apart in the direction of the cost. By
@@ -330,15 +322,15 @@ $dist_{max}$
 :::
 ::::
 
-### 3.2.5    Task Space Constraints {#section:task_space_constraints}
+### 3.2.5    Task Space Constraints
 
 In robotic manipulation, we often need to couple task-space goals (e.g.
 grasp-poses or end-effector velocity limits) with our joint space costs
 and constraints. We can enforce constraints on the robot's end-effector
 position, gaze direction, center of mass, or any other relevant function
 at user-specified points $s_i \in S_U$ along the trajectory $r(s_i)$:
-$$f_{kin}(r(s_i)) \in \relax, \hspace{35pt} \forall s_i \in S_U.
-\label{eq:path_position_constraint}$$ For common manipulators the
+$$f_{kin}(r(s_i)) \in \relax, \hspace{35pt} \forall s_i \in S_U.\label{eq:path_position_constraint}$$
+For common manipulators the
 forward kinematics $f_{kin}(r(s_i))$ are typically nonconvex, thus
 handled in the rounding stage. We leverage Drake's rich library of
 kinematic costs and constraints to write the minimal set of constraints
@@ -377,12 +369,8 @@ when placing a tall box on a table, bounding task-space velocities can
 prevent the box from tipping over while not explicitly restriction
 configuration space velocities. Task-space velocity and acceleration
 constraints can be expressed using the kinematic Jacobian ($J$) and its
-derivative: $$\begin{align}
-\label{eq:task_space_velocity_constraint}
-J(r(s_i)) \dot{r}(s_i) &\in h\mathcal V, &&\forall s_i \in S_U,\\
-\label{eq:task_space_acceleration_constraint}
-J(r(s_i)) \ddot{r}(s_i) + h\dot{J}(r(s_i)) \dot{r}(s_i) &\in h^2\mathcal A, &&\forall s_i \in S_U.
-\end{align}$$ where $\mathcal V, \mathcal A\subseteq \mathbb R^6$ are
+derivative: $$\begin{align} \label{eq:task_space_velocity_constraint} J(r(s_i)) \dot{r}(s_i) &\in h\mathcal V, &&\forall s_i \in S_U,\\ \label{eq:task_space_acceleration_constraint} J(r(s_i)) \ddot{r}(s_i) + h\dot{J}(r(s_i)) \dot{r}(s_i) &\in h^2\mathcal A, &&\forall s_i \in S_U. \end{align}$$
+where $\mathcal V, \mathcal A\subseteq \mathbb R^6$ are
 bounded convex sets constraining the spatial velocities and
 accelerations, respectively. Exploring convex surrogates for these
 constraints is more challenging due to their nonlinear dependence on the
@@ -429,11 +417,15 @@ intermediate waypoint.
 
 ### 3.3.2    Sequential and Parallel Subgraphs
 
-![Figure 2: Sequential and parallel subgraphs in a hierarchical graph
+<figure id="fig:sequential_graph">
+<Suspense fallback={null}>
+<img src="figures/math/sequential_graph.png"/>
+</Suspense>
+<figcaption>Figure 2: Sequential and parallel subgraphs in a hierarchical graph
 structure. Blue shapes represent subgraphs ($G_S$, $G_T$, $G_{1-4}$),
-and red denote subspace ($S_{1-2}$ constraints on gray edges connecting
-the subgraphs.](figures/math/sequential_graph.png){#fig:sequential_graph
-width="90%"}
+and red denote subspace ($S_{1-2}$) constraints on gray edges connecting
+the subgraphs.</figcaption>
+</figure>
 
 Arranging subgraphs sequentially and in parallel empowers the
 hierarchical structure to handle both sequential task execution and
@@ -443,8 +435,7 @@ ensuring continuity on all continuous variables. Parallel subgraphs
 allow selecting one path among several, choosing the option that
 minimizes the objective function while adhering to all constraints.
 
-We will use figure [3.2](#fig:sequential_graph){reference-type="ref"
-reference="fig:sequential_graph"} to illustrate the potential of
+We will use figure [3.2](#fig:sequential_graph) to illustrate the potential of
 sequential and parallel graphs, where $G_S$, $G_{1-4}$, and $G_T$
 represent the subgraphs (in blue) and $S_1$, $S_2$ the subspaces (in
 red). Here $G_S$, $G_T$ represent the start and goal configurations
@@ -490,23 +481,26 @@ that minimizes a desired objective function (e.g., time or path length),
 selects the appropriate object to grasp, and satisfies all task
 constraints to scan the Barcodes and drop the item into the bag.
 
-### 3.3.3    Utilizing Subgraphs as Start and Goal Regions {#section:multi_start_and_goal}
+### 3.3.3    Utilizing Subgraphs as Start and Goal Regions
 
-![Figure 3: Hierarchical graph structure with subgraphs as start and
+<figure id="fig:multi_start_graph">
+<Suspense fallback={null}>
+    <img src="figures/math/multi_start_graph.png"/>
+</Suspense>
+<figcaption>Figure 3: Hierarchical graph structure with subgraphs as start and
 goal regions. Blue shapes represent subgraphs ($G_S$, $G_T$, $G_1$),
 gray edges connect the subgraphs, and the dummy vertices (orange lines)
 enable the selection of any vertex within a subgraph as the effective
 start or
-target.](figures/math/multi_start_graph.png){#fig:multi_start_graph
-width="90%"}
+target.</figcaption>
+</figure>
 
 Hierarchical graph structures offer further flexibility by accommodating
 scenarios where the start or goal configurations are not singular points
 but rather sets of possibilities. This allows the planner to adapt to
 situations with uncertainty or multiple feasible solutions.
 
-Figure [3.3](#fig:multi_start_graph){reference-type="ref"
-reference="fig:multi_start_graph"} illustrates such a scenario, where
+Figure [3.3](#fig:multi_start_graph) illustrates such a scenario, where
 the start subgraph ($G_S$) encompasses two potential starting
 configurations ($G_{S1}$ and $G_{S2}$), while the goal subgraph ($G_T$)
 consists of a goal set ($G_{T1}$) and a specific configuration
