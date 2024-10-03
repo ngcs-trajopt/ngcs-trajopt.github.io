@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { IframeSwitch } from '../components/IframeSwitch';
 
 # Application
 
@@ -320,10 +321,12 @@ starting above the shelf, then visiting the top rack, middle rack, left
 bin, right bin, and finally returning to the top of the shelf.
 
 <figure id="fig:kuka_traj" style={{display: 'flex', flexDirection:"row", marginLeft:'0', marginRight:'0', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap'}}>
+    <IframeSwitch src="meshcats/iiwa_ik.html" height="600px">
     <Suspense fallback={null}>
         <img src="figures/iiwa_example/iiwa_gcs_comparison.png" />
         <img src="figures/iiwa_example/gcs_comparison_derivative.png" />
     </Suspense>
+    </IframeSwitch>
 <figcaption>Figure 8: The top image shows the Kuka robot in the
 environment, overlaid NGCS (blue) and classical GCS (orange)
 trajectories, following the end-effector position. The plots compare
@@ -360,6 +363,7 @@ repository at [https://ngcs-trajopt.github.io](https://ngcs-trajopt.github.io).
 ### 4.3.1    Planning with Task-Space Constraints
 
 <figure id="fig:ik_planning" style={{marginLeft:'0', marginRight:'0'}}>
+    <IframeSwitch src="meshcats/iiwa_ik.html" height="600px">
     <div style={{display: 'flex', flexDirection:"row",textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start'}}>
     <figure id="fig:ik_start"  style={{margin:'5px'}}>
         <Suspense fallback={null}>
@@ -380,6 +384,7 @@ repository at [https://ngcs-trajopt.github.io](https://ngcs-trajopt.github.io).
         <figcaption>(c) Jointly solving for IK</figcaption>
     </figure>
     </div>
+    </IframeSwitch>
     <figcaption>Figure 9: The first image displays the robot initiating from
     the right bin, the middle illustrates the blue trajectory resulting from
     separately solving the inverse kinematics problem and planning to the
@@ -417,9 +422,11 @@ quicker trajectory (1.3 seconds).
 ### 4.3.2    Avoiding Collisions in Changing Environments
 
 <figure id="fig:kuka_min_distance">
+    <IframeSwitch src="meshcats/iiwa_dist.html" height="600px">
     <Suspense fallback={null}>
         <img src="figures/iiwa_example/iiwa_min_distance.png" />
     </Suspense>
+    </IframeSwitch>
     <figcaption>Figure 10: The Kuka arm is avoiding the middle using minimum distance
 constraints, since it hasn't been captured by the iris
 regions.</figcaption>
@@ -450,9 +457,11 @@ involving two Spots, demonstrating the scalability of our approach to a
 ### 4.4.1    Planning a Multi-Stage Manipulation Task with a Floating Base
 
 <figure id="fig:spot_overview" style={{marginLeft:'0', marginRight:'0'}}>
-    <Suspense fallback={null}>
-    <img src="figures/spot/spot_grasp_simple.png" />
-    </Suspense>
+    <IframeSwitch src="meshcats/spot_store.html" height="600px">
+        <Suspense fallback={null}>
+            <img src="figures/spot/spot_grasp_simple.png" />
+        </Suspense>
+    </IframeSwitch>
 <figcaption>Figure 11: Simulation environment for Spot's multi-stage manipulation
 task. The environment includes shelves, a camera station and bins. The
 bottom left image shows the robot grasping the sugar box and lifting it
@@ -576,10 +585,11 @@ configuration.
 ### 4.4.2    Adapting to Dynamic Environments
 
 <figure id="fig:spot_collision_environmen" style={{marginLeft:'0', marginRight:'0'}}>
-<Suspense fallback={null}>
-<img src="figures/spot/spot_collision_environment.png" />
-</Suspense>
-
+<IframeSwitch src="meshcats/spot_store_clutter.html" height="600px">
+    <Suspense fallback={null}>
+        <img src="figures/spot/spot_collision_environment.png" />
+    </Suspense>
+</IframeSwitch>
 <figcaption>Figure 13: The simulation environment presents a new challenge with
 unexpected obstacles. A red shelf blocks the brown shelves, and various
 items clutter the racks and bins, requiring Spot to adapt its planned
@@ -733,18 +743,20 @@ remain stationary and a polytopic constraint on the center of mass to
 keep it within the support polygon.
 
 <figure id="fig:spot_bimanual">
-<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px'}}>
-    <Suspense fallback={null}>
-        <img src="figures/spot/spot_bimanual_0.png" />
-        <img src="figures/spot/spot_bimanual_4.png" />
-        <img src="figures/spot/spot_bimanual_1.png" />
-        <img src="figures/spot/spot_bimanual_5.png" />
-        <img src="figures/spot/spot_bimanual_2.png" />
-        <img src="figures/spot/spot_bimanual_6.png" />
-        <img src="figures/spot/spot_bimanual_3.png" />
-        <img src="figures/spot/spot_bimanual_7.png" />
-    </Suspense>
-</div>
+    <IframeSwitch src="meshcats/spot_bimanual.html" height="600px">
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px'}}>
+            <Suspense fallback={null}>
+                <img src="figures/spot/spot_bimanual_0.png" />
+                <img src="figures/spot/spot_bimanual_4.png" />
+                <img src="figures/spot/spot_bimanual_1.png" />
+                <img src="figures/spot/spot_bimanual_5.png" />
+                <img src="figures/spot/spot_bimanual_2.png" />
+                <img src="figures/spot/spot_bimanual_6.png" />
+                <img src="figures/spot/spot_bimanual_3.png" />
+                <img src="figures/spot/spot_bimanual_7.png" />
+            </Suspense>
+        </div>
+    </IframeSwitch>
 <figcaption>Figure 17: Coordinated motion planning for two Spot robots
 in a 50-dimensional configuration space. The blue and orange
 trajectories represent the end-effector paths of the two robots. The
