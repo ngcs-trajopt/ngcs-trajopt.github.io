@@ -2,10 +2,10 @@ import { visit } from "unist-util-visit";
 import fs from "fs";
 import path from "path";
 
-const citations = [];
+const citations: Element[] = [];
 
 export function createBibliography() {
-  return (tree) => {
+  return (tree: any) => {
     visit(tree, "element", (node, idx, parent) => {
       if (
         node.tagName === "div" &&

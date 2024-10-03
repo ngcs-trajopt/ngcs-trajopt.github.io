@@ -17,7 +17,7 @@
       "baseUrl": "./",
   },
   "include": [
-      "src/**/*",
+      "src", "mdx.d.ts",
   ],
   "exclude": ["node_modules", "dist", "build"]
 }

@@ -97,7 +97,7 @@ const WarningMessage = forwardRef<WarningMessageRef, WarningMessageProps>(
     const messageOpacity = useSignal(0);
     const messageOpacitySpring = useSpringValue(0);
     const positionY = useComputed(() => -messageOpacity.value * 300);
-    const timerId = useRef<number | null>(null);
+    const timerId = useRef<ReturnType<typeof setTimeout>  | null>(null);
 
     useImperativeHandle(ref, () => ({
       show: () =>
