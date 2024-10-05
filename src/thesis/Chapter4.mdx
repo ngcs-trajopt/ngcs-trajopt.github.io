@@ -248,14 +248,14 @@ ensuring a level start and finish.
     are unattainable. Therefore, an executable trajectory flying through
     the building might take longer than 6.5 seconds.
 
--   Red Trajectory: This trajectory utilizes our proposed method,
+-   **Red Trajectory**: This trajectory utilizes our proposed method,
     enforcing fourth-order continuity and limiting accelerations to 10
     $m/s^2$ (a thrust-to-weight ratio of two). The objective function
     minimizes path length. Notably, this trajectory chooses to fly
     around the building, avoiding the sharp corners within it, and takes
     5.0 seconds to complete.
 
--   Yellow Trajectory: This trajectory also employs our proposed method
+-   **Yellow Trajectory**: This trajectory also employs our proposed method
     with the same constraints as the red trajectory. However, the
     objective function minimizes the convex surrogate for the squared
     norm of snap, leading to a smoother path that also flies around the
@@ -537,12 +537,14 @@ excluding the box itself from the IRIS region generation.
     $\prescript{W}{}{X}^{Grasp}$ in task space to ensure a proper grasp,
     as visualized in the bottom left image of Figure
     [4.20](#fig:spot_overview).
-    $$\begin{align}
+    $$
+    \begin{align}
         f_{kin}(r(0)) = \prescript{W}{}{X}^{Grasp},\\
         J(r(0)) \dot{r}(0) = \vec{0}\\
         J(r(0)) \ddot{r}(0) + h\dot{J}(r(0))\dot{r}(0) = \vec{0}.
-        \end{align}$$ Since the object is initially at rest, the spatial
-    velocity and acceleration is set to zero.
+    \end{align}
+    $$
+    Since the object is initially at rest, the spatial velocity and acceleration is set to zero.
 
 -   At $s=0.5$, the same task-space constraints are enforced, but the
     gripper is closed.

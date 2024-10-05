@@ -29,8 +29,12 @@ export function AuthorBlock({ authors, affiliation, note }: AuthorBlockProps) {
             }}
             target="_blank"
             rel="noopener noreferrer"
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.textDecoration = 'underline')}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.textDecoration = 'none')}
+            onMouseEnter={(e) =>
+              ((e.target as HTMLElement).style.textDecoration = "underline")
+            }
+            onMouseLeave={(e) =>
+              ((e.target as HTMLElement).style.textDecoration = "none")
+            }
           >
             {author.name}
           </a>

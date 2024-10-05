@@ -9,10 +9,12 @@ import rehypeSlugCustomId from "rehype-slug-custom-id";
 import rehypeSlug from "rehype-slug";
 import rehypeFigure from "rehype-figure";
 import rehypeCitation from "rehype-citation";
+
 import {
   createBibliography,
   extractCitationsFromBibtex,
 } from "./src/extractCitations";
+import { removeKatexHtml } from "./src/removeKatexHtml";
 
 export default defineConfig({
   plugins: [
@@ -22,6 +24,7 @@ export default defineConfig({
         remarkPlugins: [remarkMath, remarkGfm],
         rehypePlugins: [
           rehypeKatex,
+          removeKatexHtml,
           rehypeSlug,
           rehypeSlugCustomId,
           rehypeAutolinkHeadings,
