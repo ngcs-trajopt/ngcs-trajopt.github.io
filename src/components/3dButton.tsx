@@ -1,12 +1,19 @@
 import { config, animated, useSpringValue } from "@react-spring/three";
 import {
   forwardRef,
+  PropsWithChildren,
   ReactNode,
   Suspense,
   useImperativeHandle,
   useRef,
 } from "react";
-import { Text, Root, Container } from "@react-three/uikit";
+import {
+  FontFamilyProvider,
+  Text,
+  Root,
+  Container,
+  ContainerProperties,
+} from "@react-three/uikit";
 import { useFrame, type GroupProps } from "@react-three/fiber";
 import { useSignal, useComputed } from "@preact/signals-react";
 
@@ -70,9 +77,9 @@ export function Button({ name, children, link, ...props }: ButtonProps) {
               paddingY={30}
               borderRadius={30}
             >
-              <Text color="#f0f0f0" fontSize={100}>
+              <LocalText color="#f0f0f0" fontSize={100}>
                 {name}
-              </Text>
+              </LocalText>
               <WarningMessage ref={warningMessageRef}>
                 Coming Soon!
               </WarningMessage>
@@ -130,10 +137,32 @@ const WarningMessage = forwardRef<WarningMessageRef, WarningMessageProps>(
         paddingY={30}
         borderRadius={30}
       >
-        <Text opacity={messageOpacity} color="#f0f0f0" fontSize={100}>
+        <LocalText opacity={messageOpacity} color="#f0f0f0" fontSize={100}>
           {children}
-        </Text>
+        </LocalText>
       </Container>
     );
   },
 );
+
+/**
+ * We don't want to depend on remotely hosted fonts.
+ */
+function LocalText({
+  children,
+  ...props
+}: PropsWithChildren<ContainerProperties>) {
+  return (
+    <Suspense fallback={null}>
+      <FontFamilyProvider
+        default={{
+          normal: "/fonts/inter-normal.json",
+        }}
+      >
+        <Text {...props} fontFamily="default">
+          {children}
+        </Text>
+      </FontFamilyProvider>
+    </Suspense>
+  );
+}
