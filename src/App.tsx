@@ -3,6 +3,7 @@ import { Title } from "./components/Title";
 import { AuthorBlock } from "./components/Author";
 import { Links } from "./components/Links";
 import PaperAbstract from "./components/PaperAbstract.mdx";
+import { UAVOverview } from "./components/UAVOverview";
 
 export default function App() {
   const authors = [
@@ -23,6 +24,22 @@ export default function App() {
         note="IROS 2024"
       />
       <Links />
+      <div
+        style={{
+          maxWidth: "300mm",
+          margin: "0 auto",
+          fontFamily: "'Google Sans', sans-serif",
+          lineHeight: "2.0",
+          fontSize: "18px",
+          padding: "15px 20px",
+          backgroundColor: "#fafafa",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          marginBottom: "20px",
+        }}
+      >
+        <UAVOverview />
+      </div>
       <PaperAbstract />
       <Thesis />
     </div>

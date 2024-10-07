@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { IframeSwitch } from '../components/IframeSwitch';
+import { UAVOverview } from '../components/UAVOverview';
 
 # Application
 
@@ -178,9 +179,7 @@ constraints at the start and end, the optimal plan takes approximately
 ## 4.2    Quadrotor Example
 
 <figure id="fig:uav" style={{marginLeft:'0', marginRight:'0'}}>
-    <Suspense fallback={null}>
-        <img src="figures/uav/Drones.png"/>
-    </Suspense>
+    <UAVOverview  />
     <figcaption>Figure 6: Three candidate trajectories for a quadrotor navigating from
 the bottom left corner to the top right room of a building. The blue
 trajectory (convex GCS trajectory optimization) is fast but lacks
