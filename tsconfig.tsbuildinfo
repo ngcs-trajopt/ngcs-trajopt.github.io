@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/extractcitations.ts","./src/main.tsx","./src/mdx.d.ts","./src/removekatexhtml.ts","./src/vite-env.d.ts","./src/components/3dbutton.tsx","./src/components/author.tsx","./src/components/iframeswitch.tsx","./src/components/links.tsx","./src/components/title.tsx","./src/components/uavoverview.tsx","./src/thesis/thesis.tsx"],"version":"5.6.2"}

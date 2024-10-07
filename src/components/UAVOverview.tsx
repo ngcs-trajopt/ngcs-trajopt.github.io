@@ -46,7 +46,12 @@ export function UAVOverview({ ...props }) {
   );
 }
 
-function HoverableGif({ src, style }) {
+interface HoverableGifProps {
+  src: string;
+  style: React.CSSProperties;
+}
+
+function HoverableGif({ src, style }: HoverableGifProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
