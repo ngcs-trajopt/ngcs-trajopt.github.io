@@ -21,9 +21,16 @@ interface ButtonProps extends GroupProps {
   name: string;
   children: ReactNode;
   link?: string;
+  onClick?: () => void;
 }
 
-export function Button({ name, children, link, ...props }: ButtonProps) {
+export function Button({
+  name,
+  children,
+  link,
+  onClick,
+  ...props
+}: ButtonProps) {
   const ySpring = useSpringValue(0);
   const xSpring = useSpringValue(0, {
     config: { tension: 600, friction: 10, clamp: true },
@@ -43,12 +50,16 @@ export function Button({ name, children, link, ...props }: ButtonProps) {
         onPointerOver={() => scale.start(1.5)}
         onPointerOut={() => scale.start(1)}
         onClick={() => {
+          onClick?.();
           if (link) {
             yRotation.start(2 * Math.PI, { config: config.slow }).then(() => {
               yRotation.start(0, { config: config.molasses });
               if (link.includes("#")) {
-                window.location.hash = "";
-                window.location.hash = link;
+                const hash = link.split("#")[1];
+                const element = document.getElementById(hash);
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth" });
+                }
               } else {
                 window.location.href = link;
               }

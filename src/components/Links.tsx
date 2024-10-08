@@ -2,8 +2,10 @@ import { Button } from "./3dButton";
 import { Gltf } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
+import { useThesis } from "../thesis/ThesisContext";
 
 export function Links() {
+  const { showThesis } = useThesis();
   return (
     <Canvas camera={{ position: [0, 0, 5] }}>
       <Button position-x={-6} name="Paper" link="/wrangel24IROS.pdf">
@@ -12,7 +14,7 @@ export function Links() {
         </Suspense>
       </Button>
 
-      <Button position-x={0} name="Thesis" link="#Thesis">
+      <Button position-x={0} name="Thesis" link="#Thesis" onClick={showThesis}>
         <Suspense fallback={null}>
           <Gltf
             scale={2.5}

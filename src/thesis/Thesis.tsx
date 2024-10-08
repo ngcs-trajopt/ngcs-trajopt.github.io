@@ -9,9 +9,15 @@ import TitlePage from "./TitlePage.mdx";
 import AbstractPage from "./AbstractPage.mdx";
 import References from "./References.mdx";
 import { type PropsWithChildren } from "react";
+import { useThesis } from "./ThesisContext";
 
 const chapters = [Chapter1, Chapter2, Chapter3, Chapter4, Chapter5];
 export function Thesis() {
+  const { isVisible } = useThesis();
+
+  if (!isVisible) {
+    return null;
+  }
   return (
     <div id="Thesis">
       <A4Paper>
