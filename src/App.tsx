@@ -1,10 +1,12 @@
-import { Thesis } from "./thesis/Thesis";
 import { Title } from "./components/Title";
 import { AuthorBlock } from "./components/Author";
-import { Links } from "./components/Links";
 import PaperAbstract from "./components/PaperAbstract.mdx";
 import { UAVOverview } from "./components/UAVOverview";
 import { ThesisProvider } from "./thesis/ThesisContext";
+import { lazy, Suspense } from "react";
+
+const Links = lazy(() => import("./components/Links"));
+const Thesis = lazy(() => import("./thesis/Thesis"));
 
 export default function App() {
   const authors = [
@@ -25,12 +27,16 @@ export default function App() {
           affiliation="Massachusetts Institute of Technology"
           note="IROS 2024"
         />
-        <Links />
+        <Suspense fallback={null}>
+          <Links />
+        </Suspense>
         <div className="max-w-[300mm] mx-auto font-sans leading-loose text-lg p-4 bg-gray-50 shadow-md rounded-lg mb-5">
           <UAVOverview />
         </div>
         <PaperAbstract />
-        <Thesis />
+        <Suspense fallback={null}>
+          <Thesis />
+        </Suspense>
       </div>
     </ThesisProvider>
   );

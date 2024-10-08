@@ -1,8 +1,8 @@
 import { config, animated, useSpringValue } from "@react-spring/three";
 import {
   forwardRef,
-  PropsWithChildren,
-  ReactNode,
+  type PropsWithChildren,
+  type ReactNode,
   Suspense,
   useImperativeHandle,
   useRef,

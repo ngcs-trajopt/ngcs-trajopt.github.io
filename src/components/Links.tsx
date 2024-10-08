@@ -4,7 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { useThesis } from "../thesis/ThesisContext";
 
-export function Links() {
+export default function Links() {
   const { showThesis } = useThesis();
   return (
     <Canvas camera={{ position: [0, 0, 5] }}>
