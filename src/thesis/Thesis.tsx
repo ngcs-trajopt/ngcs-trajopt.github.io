@@ -56,20 +56,7 @@ export function Thesis() {
 
 function A4Paper({ children }: PropsWithChildren) {
   return (
-    <div
-      style={{
-        maxWidth: "210mm",
-        margin: "0 auto",
-        fontFamily: "'Lucida Bright', 'Source Serif Pro', serif",
-        lineHeight: "2.0",
-        fontSize: "18px",
-        padding: "110px",
-        backgroundColor: "#ffffff",
-        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-        borderRadius: "8px",
-        marginBottom: "20px",
-      }}
-    >
+    <div className="max-w-[210mm] bg-white p-10 md:p-[110px] font-serif text-lg shadow-md rounded-lg mb-5 mx-auto leading-loose">
       <style>
         {`
                     a {
