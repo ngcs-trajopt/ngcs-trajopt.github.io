@@ -12,22 +12,17 @@
         marginBottom: "20px",
     }}
 >
-<div style={{ textAlign: "center"}}>
+<div className="text-center">
 ## Abstract
 </div>
 
-<div style={{textAlign: "justify"}}>
+<div className="text-justify">
 Collision-free motion planning with trajectory optimization is inherently nonconvex. Some of this nonconvexity is fundamental: the robot might need to make a discrete decision to go left around an obstacle *or* right around an obstacle. Some of the nonconvexity is potentially more benign: we might want to penalize high-order derivatives of our continuous trajectories in order to encourage smoothness. Recently, Graphs of Convex Sets (GCS) have been applied to trajectory optimization, addressing the fundamental nonconvexity with efficient online optimization over a "roadmap" represented by an approximate convex decomposition of the configuration space. In this paper, we explore some of the most useful nonconvex costs and constraints and the suitability of combining convex "global" optimization using GCS with nonconvex trajectory optimization for rounding the local solutions. We find that for many applications, this combination can lead to a small number of nonconvex optimizations finding extremely good solutions to the nonconvex trajectory optimization problem.
 </div>
 
 ## BibTeX
 <div
-    style={{
-        backgroundColor: "#f0f0f0",
-        padding: "10px",
-        borderRadius: "6px",
-        overflow: 'auto',
-    }}
+    className="bg-[#f0f0f0] p-2 rounded-md overflow-auto"
 >
 ```bibtex
 @article{wrangel2024ngcs,

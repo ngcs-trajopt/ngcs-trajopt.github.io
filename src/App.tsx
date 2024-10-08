@@ -16,7 +16,7 @@ export default function App() {
   ];
   return (
     <ThesisProvider>
-      <div style={{ backgroundColor: "#f0f0f0", padding: "20px" }}>
+      <div className="bg-[#f0f0f0] p-5">
         <Title>
           Using Graphs of Convex Sets to Guide Nonconvex Trajectory Optimization
         </Title>
@@ -26,20 +26,7 @@ export default function App() {
           note="IROS 2024"
         />
         <Links />
-        <div
-          style={{
-            maxWidth: "300mm",
-            margin: "0 auto",
-            fontFamily: "'Google Sans', sans-serif",
-            lineHeight: "2.0",
-            fontSize: "18px",
-            padding: "15px 20px",
-            backgroundColor: "#fafafa",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-            marginBottom: "20px",
-          }}
-        >
+        <div className="max-w-[300mm] mx-auto font-sans leading-loose text-lg p-4 bg-gray-50 shadow-md rounded-lg mb-5">
           <UAVOverview />
         </div>
         <PaperAbstract />

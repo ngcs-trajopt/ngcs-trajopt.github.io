@@ -11,22 +11,12 @@ interface AuthorBlockProps {
 
 export function AuthorBlock({ authors, affiliation, note }: AuthorBlockProps) {
   return (
-    <div
-      style={{
-        fontFamily: "'Google Sans', sans-serif",
-        fontSize: "1.2rem",
-        textAlign: "center",
-        marginTop: "1rem",
-      }}
-    >
+    <div className="font-sans text-lg text-center mt-4">
       {authors.map((author: Author, index: number) => (
-        <span key={index} style={{ marginRight: "0.5rem" }}>
+        <span key={index} className="mr-2">
           <a
             href={author.link}
-            style={{
-              color: "hsl(204, 86%, 53%)",
-              textDecoration: "none",
-            }}
+            className="text-blue-600 hover:text-blue-800 transition-colors duration-300 ease-in-out"
             target="_blank"
             rel="noopener noreferrer"
             onMouseEnter={(e) =>
@@ -41,10 +31,9 @@ export function AuthorBlock({ authors, affiliation, note }: AuthorBlockProps) {
           {index < authors.length - 1 && ","}
         </span>
       ))}
-      <div style={{ marginTop: "0.5rem" }}>
-        {affiliation}
-        <br />
-        {note}
+      <div className="mt-4 text-gray-700">
+        <div className="font-semibold">{affiliation}</div>
+        <div className="italic">{note}</div>
       </div>
     </div>
   );

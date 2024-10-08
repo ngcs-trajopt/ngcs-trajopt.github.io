@@ -1,44 +1,28 @@
-<div style={{ position: 'relative', userSelect: 'none', height: '0px' }}>
+<div className="relative select-none h-0">
   <a 
     href="/Wrangel24a.pdf" 
     download="David_von_Wrangel_Thesis.pdf"
     id="download-link"
-    style={{
-      position: 'absolute',
-      top: '-100px',
-      right: '-100px',
-      display: 'inline-block',
-      padding: '2px 20px',
-      fontSize: '18px',
-      fontWeight: '700',
-      color: '#fff',
-      backgroundColor: '#333',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      transition: 'background-color 0.3s ease',
-      fontFamily: 'Roboto, sans-serif'
-    }}
-    onMouseOver={e => document.getElementById('download-link').style.backgroundColor = '#555'}
-    onMouseOut={e => document.getElementById('download-link').style.backgroundColor = '#333'}
+    className="absolute top-[-100px] right-[-100px] inline-block px-5 py-1.5 text-lg font-bold text-white bg-gray-800 no-underline rounded-md transition-colors duration-300 ease-in-out font-mono hover:bg-gray-600"
   >
     Download PDF
   </a>
 </div>
-<div style={{textAlign: 'center', lineHeight: '1.6', fontSize: "18px" }}>
-  <div style={{ fontSize: '28px', fontWeight: 'bold' }}>
+<div className="flex flex-col items-center leading-relaxed text-lg">
+  <div className="text-4xl font-bold text-center">
     Guiding Nonconvex Trajectory Optimization with<br />Hierarchical Graphs of Convex Sets
   </div>
 
-  <div style={{ marginTop: '30px'}}>
+  <div className="mt-8 text-center">
     by<br />
-    <div style={{ marginTop: "10px", marginBottom: "10px", fontSize: '22px'}}>
+    <div className="mt-2 mb-2 text-xl">
     David von Wrangel<br />
     </div>
     S.B. in Aerospace Engineering and in Electrical Engineering and Computer Science,<br />
     Massachusetts Institute of Technology (2023)
   </div>
 
-  <div style={{ marginTop: '30px' }}>
+  <div className="mt-3 text-center">
     Submitted to the Department of Electrical Engineering and Computer Science<br />
     in partial fulfillment of the requirements for the degree of<br />
     MASTER OF ENGINEERING IN ELECTRICAL ENGINEERING AND COMPUTER SCIENCE<br />
@@ -47,44 +31,44 @@
     May 2024
   </div>
 
-  <div style={{ marginTop: '40px' }}>
+  <div className="mt-4 text-center">
     &copy; 2024 David von Wrangel. All rights reserved.
   </div>
 
-  <div style={{ marginTop: '20px'}}>
+  <div className="mt-2 text-center">
     The author hereby grants to MIT a nonexclusive, worldwide, irrevocable, royalty-free license to<br />
     exercise any and all rights under copyright, including to reproduce, preserve, distribute and<br />
     publicly display copies of the thesis, or release the thesis under an open-access license.
   </div>
 
 
-  <div style={{ marginTop: '60px'}}>
-    <div style={{ display: 'flex', flexDirection: "row"}}>
-        <div style={{width: '200px'}}>
+  <div className="flex flex-col items-start mt-6 text-left mx-auto w-full">
+    <div className="flex flex-row w-full">
+        <div className="w-[200px]">
             Authored by:
         </div>
-        <div style={{ textAlign:"left"}}>
+        <div className="text-left">
             David von Wrangel<br />
             Department of Electrical Engineering and Computer Science<br />
             May 10, 2024<br /><br />
         </div>
     </div>
 
-    <div style={{ display: 'flex', flexDirection: "row"}}>
-        <div style={{width: '200px'}}>
+    <div className="flex flex-row w-full">
+        <div className="w-[200px]">
             Certified by:
         </div>
-        <div style={{ textAlign:"left"}}>
+        <div className="text-left">
             Russ Tedrake<br />
             Toyota Professor of EECS, Aero/Astro, MechE, Thesis Supervisor<br /><br />
         </div>
     </div>
 
-    <div style={{ display: 'flex', flexDirection: "row"}}>
-        <div style={{width: '200px'}}>
+    <div className="flex flex-row w-full">
+        <div className="w-[200px]">
             Accepted by:
         </div>
-        <div style={{ textAlign:"left"}}>
+        <div className="text-left">
             Katrina LaCurts<br />
             Chair, Master of Engineering Thesis Committee
         </div>

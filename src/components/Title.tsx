@@ -2,17 +2,7 @@ import { PropsWithChildren } from "react";
 
 export function Title({ children }: PropsWithChildren) {
   return (
-    <h1
-      style={{
-        fontFamily: "'Google Sans', sans-serif",
-        fontSize: "2.5em",
-        fontWeight: "bold",
-        color: "#333",
-        textAlign: "center",
-        margin: "20px 0",
-        lineHeight: "1.2",
-      }}
-    >
+    <h1 className="font-sans text-4xl font-bold text-gray-800 text-center my-5 leading-tight">
       {children}
     </h1>
   );

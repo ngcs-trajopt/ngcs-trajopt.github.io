@@ -2,44 +2,24 @@ import { Suspense, useState } from "react";
 
 export function UAVOverview({ ...props }) {
   return (
-    <div style={{ position: "relative", userSelect: "none" }} {...props}>
+    <div className="relative select-none" {...props}>
       <Suspense fallback={null}>
-        <img
-          src="figures/uav/Drones.png"
-          style={{ background: "white", width: "100%", height: "100%" }}
-        />
+        <img src="figures/uav/Drones.png" className="bg-white w-full h-full" />
         <HoverableGif
           src="figures/uav/drones_corner.gif"
-          style={{
-            width: "26%",
-            right: "0.5%",
-            top: "57.5%",
-          }}
+          className="absolute w-[26%] right-[0.5%] top-[57.5%]"
         />
         <HoverableGif
           src="figures/uav/drones_final.gif"
-          style={{
-            width: "26%",
-            right: "0.5%",
-            top: "1%",
-          }}
+          className="absolute w-[26%] right-[0.5%] top-[1%]"
         />
         <HoverableGif
           src="figures/uav/drones_ngcs_start.gif"
-          style={{
-            width: "26.5%",
-            left: "0.5%",
-            top: "2%",
-          }}
+          className="absolute w-[26.5%] left-[0.5%] top-[2%]"
         />
         <HoverableGif
           src="figures/uav/drones_blue_start.gif"
-          style={{
-            width: "26%",
-            scale: "1.02 1",
-            left: "0.8%",
-            top: "57.5%",
-          }}
+          className="absolute w-[27%] scale-[1.05] left-[0.4%] top-[56.6%]"
         />
       </Suspense>
     </div>
@@ -48,48 +28,31 @@ export function UAVOverview({ ...props }) {
 
 interface HoverableGifProps {
   src: string;
-  style: React.CSSProperties;
+  className: string;
 }
 
-function HoverableGif({ src, style }: HoverableGifProps) {
+function HoverableGif({ src, className }: HoverableGifProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
   return (
-    <div
-      style={{
-        ...style,
-        position: "absolute",
-        boxShadow: "none",
-        lineHeight: 0,
-        boxSizing: "border-box",
-      }}
-    >
+    <div className={`${className} shadow-none leading-none box-border`}>
       <div
-        style={{
-          userSelect: "none",
-          backgroundColor: "#565151",
-          opacity: isHovered && !isClicked ? 0.5 : isClicked ? 1 : 0,
-          cursor: "pointer",
-          transition: "opacity 0.3s",
-          borderRadius: "2%",
-          padding: "2%",
-          boxSizing: "border-box",
-          width: "100%",
-          height: "100%",
-        }}
+        className={`select-none bg-[#565151] cursor-pointer transition-opacity duration-300 rounded-[2%] p-[2%] box-border w-full h-full ${
+          isHovered && !isClicked
+            ? "opacity-50"
+            : isClicked
+              ? "opacity-100"
+              : "opacity-0"
+        }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setIsClicked(!isClicked)}
       >
         <img
-          style={{
-            borderRadius: "1.5%",
-            transition: "opacity 0.3s",
-            opacity: isClicked ? 1 : 0,
-            userSelect: "none",
-            boxSizing: "border-box",
-          }}
+          className={`rounded-[1.5%] transition-opacity duration-300 box-border w-full h-auto ${
+            isClicked ? "opacity-100" : "opacity-0"
+          }`}
           src={src}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}

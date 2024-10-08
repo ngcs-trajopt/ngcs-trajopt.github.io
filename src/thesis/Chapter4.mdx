@@ -25,28 +25,28 @@ problems.
 
 <figure id="fig:2d_gcs_comparison">
     <Suspense fallback={null}>
-    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-        <figure id="fig:2d_obstacles" style={{flex: '1 1 100px', margin: '2px', textAlign: 'center'}}>
-            <img src="figures/two_dimensional_example/environment.png" style={{width: '100%', height: 'auto'}} />
+    <div className="flex flex-row justify-between items-start flex-wrap">
+        <figure id="fig:2d_obstacles" className="flex-1 min-w-[100px] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/environment.png" className="w-full h-auto" />
             <figcaption>(a) 2D Environment</figcaption>
         </figure>
-        <figure id="fig:2d_decomposition" style={{flex: '1 1 100px', margin: '2px', textAlign: 'center'}}>
-            <img src="figures/two_dimensional_example/decomposition.png" style={{width: '100%', height: 'auto'}} />
+        <figure id="fig:2d_decomposition" className="flex-1 min-w-[100px] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/decomposition.png" className="w-full h-auto" />
             <figcaption>(b) Free Space</figcaption>
         </figure>
-        <figure id="fig:classical_gcs" style={{flex: '1 1 100px', margin: '2px', textAlign: 'center'}}>
-            <img src="figures/two_dimensional_example/classical_gcs_traj.png" style={{width: '100%', height: 'auto'}} />
-            <img src="figures/two_dimensional_example/classical_gcs_deriatives.png" style={{width: '100%', height: 'auto'}} />
+        <figure id="fig:classical_gcs" className="flex-1 min-w-[100px] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/classical_gcs_traj.png" className="w-full h-auto" />
+            <img src="figures/two_dimensional_example/classical_gcs_deriatives.png" className="w-full h-auto" />
             <figcaption>(c) Convex GCS</figcaption>
         </figure>
-        <figure id="fig:gcs_toppra" style={{flex: '1 1 100px', margin: '2px', textAlign: 'center'}}>
-            <img src="figures/two_dimensional_example/toppra_gcs_traj.png" style={{width: '100%', height: 'auto'}} />
-            <img src="figures/two_dimensional_example/toppra_gcs_derivatives.png" style={{width: '100%', height: 'auto'}} />
+        <figure id="fig:gcs_toppra" className="flex-1 min-w-[100px] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/toppra_gcs_traj.png" className="w-full h-auto" />
+            <img src="figures/two_dimensional_example/toppra_gcs_derivatives.png" className="w-full h-auto" />
             <figcaption>(d) GCS + TOPP</figcaption>
         </figure>
-        <figure id="fig:gcs_nonlinear" style={{flex: '1 1 100px', margin: '2px', textAlign: 'center'}}>
-            <img src="figures/two_dimensional_example/ngcs_traj.png" style={{width: '100%', height: 'auto'}} />
-            <img src="figures/two_dimensional_example/ngcs_derivatives.png" style={{width: '100%', height: 'auto'}} />
+        <figure id="fig:gcs_nonlinear" className="flex-1 min-w-[100px] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/ngcs_traj.png" className="w-full h-auto" />
+            <img src="figures/two_dimensional_example/ngcs_derivatives.png" className="w-full h-auto" />
             <figcaption>(e) NGCS</figcaption>
         </figure>
     </div>
@@ -104,25 +104,25 @@ path is fixed, and it only optimizes for time.
 ### 4.1.2    Planning through Hierarchical Graphs
 
 <figure id="fig:2d_subgraphs">
-    <div style={{display: 'flex', flexDirection:"row", textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-    <figure id="fig:inter_gcs" style={{flex: '1 1 300px', margin: '10px'}}>
-        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
-            <Suspense fallback={null}>
-                <img src="figures/two_dimensional_example/intermediate_traj.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
-                <img src="figures/two_dimensional_example/intermediate_derivatives.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
-            </Suspense>
-        </div>
-        <figcaption>(a) Planning through Subspaces</figcaption>
-    </figure>
-    <figure id="fig:multi_gcs" style={{flex: '1 1 300px', margin: '10px'}}>
-        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
-            <Suspense fallback={null}>
-                <img src="figures/two_dimensional_example/multi_start_traj.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
-                <img src="figures/two_dimensional_example/multi_start_derivatives.png" style={{height: '200px', width: 'auto', objectFit: 'contain', margin: '5px'}} />
-            </Suspense>
-        </div>
-        <figcaption>(b) Multi Start/Goal Planning</figcaption>
-    </figure>
+    <div className="flex flex-row text-center justify-between items-start flex-wrap">
+        <figure id="fig:inter_gcs" className="flex-1 min-w-[300px] m-2.5">
+            <div className="flex flex-row items-center flex-wrap">
+                <Suspense fallback={null}>
+                    <img src="figures/two_dimensional_example/intermediate_traj.png" className="h-[200px] w-auto object-contain m-1.25" />
+                    <img src="figures/two_dimensional_example/intermediate_derivatives.png" className="h-[200px] w-auto object-contain m-1.25" />
+                </Suspense>
+                <figcaption>(a) Planning through Subspaces</figcaption>
+            </div>
+        </figure>
+        <figure id="fig:multi_gcs" className="flex-1 min-w-[300px] m-2.5">
+            <div className="flex flex-row items-center flex-wrap">
+                <Suspense fallback={null}>
+                    <img src="figures/two_dimensional_example/multi_start_traj.png" className="h-[200px] w-auto object-contain m-1.25" />
+                    <img src="figures/two_dimensional_example/multi_start_derivatives.png" className="h-[200px] w-auto object-contain m-1.25" />
+                </Suspense>
+                <figcaption>(b) Multi Start/Goal Planning</figcaption>
+            </div>
+        </figure>
     </div>
 <figcaption>Figure 5: Planning with intermediate waypoints and
 multi-start/goal points. The left column shows a planning problem, which
@@ -178,9 +178,9 @@ constraints at the start and end, the optimal plan takes approximately
 
 ## 4.2    Quadrotor Example
 
-<figure id="fig:uav" style={{marginLeft:'0', marginRight:'0'}}>
-    <UAVOverview  />
-    <figcaption>Figure 6: Three candidate trajectories for a quadrotor navigating from
+<figure id="fig:uav" className="mx-0">
+    <UAVOverview />
+<figcaption>Figure 6: Three candidate trajectories for a quadrotor navigating from
 the bottom left corner to the top right room of a building. The blue
 trajectory (convex GCS trajectory optimization) is fast but lacks
 smoothness and exhibits unrealistic roll due to high initial
@@ -274,27 +274,26 @@ angle using approaches like @cohn2023non.
 
 ## 4.3    Manipulation Example
 
-<figure id="fig:kuka_env" style={{marginLeft:'0', marginRight:'0'}}>
-    <div style={{display: 'flex', flexDirection:"row", textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-    <figure id="fig:kuka_waypoints" style={{flex: '1 1 30%', margin: '0 5px'}}>
+<figure id="fig:kuka_env" className="mx-0">
+    <div className="flex flex-row text-center justify-around items-start flex-wrap w-full">
+    <figure id="fig:kuka_waypoints" className="flex-1 m-0 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-            <img src="figures/iiwa_example/waypoint_seeds_labelled.jpg" style={{width: '100%', height: 'auto'}}/>
+            <img src="figures/iiwa_example/waypoint_seeds_labelled.jpg" className="w-full h-auto"/>
         </Suspense>
         <figcaption>(a) Waypoints</figcaption>
     </figure>
-    <figure id="fig:kuka_extra_seeds" style={{flex: '1 1 30%', margin: '0 5px'}}>
+    <figure id="fig:kuka_extra_seeds" className="flex-1 my-0 mx-1.5 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-            <img src="figures/iiwa_example/additional_seeds_labelled.jpg" style={{width: '100%', height: 'auto'}}/>
+            <img src="figures/iiwa_example/additional_seeds_labelled.jpg" className="w-full h-auto"/>
         </Suspense>
         <figcaption>(b) Additional Seeds</figcaption>
     </figure>
-    <figure style={{flex: '1 1 30%', margin: '0 5px'}}>
+    <figure className="flex-1 m-0 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-            <img src="figures/iiwa_example/graph_crop.jpg" style={{width: '100%', height: 'auto'}}/>
+            <img src="figures/iiwa_example/graph_crop.jpg" className="w-full h-auto"/>
         </Suspense>
     </figure>
     </div>
-
     <figcaption>Figure 7: The top left image illustrates the planning
     environment with designated waypoints <span
     class="math inline"><em>q</em><sub>1−5</sub></span> and the robot arms
@@ -319,11 +318,11 @@ through five configurations (Figure
 starting above the shelf, then visiting the top rack, middle rack, left
 bin, right bin, and finally returning to the top of the shelf.
 
-<figure id="fig:kuka_traj" style={{display: 'flex', flexDirection:"row", marginLeft:'0', marginRight:'0', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap'}}>
+<figure id="fig:kuka_traj" className="flex flex-row justify-between items-end flex-wrap mx-0">
     <IframeSwitch src="meshcats/iiwa_ik.html" height="600px">
     <Suspense fallback={null}>
-        <img src="figures/iiwa_example/iiwa_gcs_comparison.png" />
-        <img src="figures/iiwa_example/gcs_comparison_derivative.png" />
+        <img src="figures/iiwa_example/iiwa_gcs_comparison.png" className="w-full h-auto" />
+        <img src="figures/iiwa_example/gcs_comparison_derivative.png" className="w-full h-auto" />
     </Suspense>
     </IframeSwitch>
 <figcaption>Figure 8: The top image shows the Kuka robot in the
@@ -361,28 +360,28 @@ repository at [https://ngcs-trajopt.github.io](https://ngcs-trajopt.github.io).
 
 ### 4.3.1    Planning with Task-Space Constraints
 
-<figure id="fig:ik_planning" style={{marginLeft:'0', marginRight:'0'}}>
+<figure id="fig:ik_planning" className="mx-0">
     <IframeSwitch src="meshcats/iiwa_ik.html" height="600px">
-    <div style={{display: 'flex', flexDirection:"row",textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start'}}>
-    <figure id="fig:ik_start"  style={{margin:'5px'}}>
-        <Suspense fallback={null}>
-        <img src="figures/iiwa_example/ik_traj_start.png" style={{flex: '1', margin: '0 0px'}}/>
-        </Suspense>
-        <figcaption>(a) The robot starts in the right bin</figcaption>
-    </figure>
-    <figure id="fig:ik_goal_configuration"  style={{margin:'5px'}}>
-        <Suspense fallback={null}>
-        <img src="figures/iiwa_example/ik_traj_configuration.png"  style={{flex: '1', margin: '0 0px'}}/>
-        </Suspense>
-        <figcaption>(b) Planning to a goal configuration</figcaption>
-    </figure>
-    <figure id="fig:ik_goal_position"  style={{margin:'5px'}}>
-        <Suspense fallback={null}>
-        <img src="figures/iiwa_example/ik_traj_position.png" style={{flex: '1', margin: '0 0px'}} />
-        </Suspense>
-        <figcaption>(c) Jointly solving for IK</figcaption>
-    </figure>
-    </div>
+        <div className="flex flex-row text-center justify-around items-start flex-wrap">
+            <figure id="fig:ik_start" className="m-0 min-w-[250px] max-w-[33%]">
+                <Suspense fallback={null}>
+                    <img src="figures/iiwa_example/ik_traj_start.png" className="flex-1 m-0" />
+                </Suspense>
+                <figcaption>(a) The robot starts in the right bin</figcaption>
+            </figure>
+            <figure id="fig:ik_goal_configuration" className="my-0 mx-0.5 min-w-[250px] max-w-[33%]">
+                <Suspense fallback={null}>
+                    <img src="figures/iiwa_example/ik_traj_configuration.png" className="flex-1 m-0" />
+                </Suspense>
+                <figcaption>(b) Planning to a goal configuration</figcaption>
+            </figure>
+            <figure id="fig:ik_goal_position" className="m-0 min-w-[250px] max-w-[33%]">
+                <Suspense fallback={null}>
+                    <img src="figures/iiwa_example/ik_traj_position.png" className="flex-1 m-0" />
+                </Suspense>
+                <figcaption>(c) Jointly solving for IK</figcaption>
+            </figure>
+        </div>
     </IframeSwitch>
     <figcaption>Figure 9: The first image displays the robot initiating from
     the right bin, the middle illustrates the blue trajectory resulting from
@@ -455,10 +454,10 @@ involving two Spots, demonstrating the scalability of our approach to a
 
 ### 4.4.1    Planning a Multi-Stage Manipulation Task with a Floating Base
 
-<figure id="fig:spot_overview" style={{marginLeft:'0', marginRight:'0'}}>
+<figure id="fig:spot_overview" className="mx-0">
     <IframeSwitch src="meshcats/spot_store.html" height="600px">
         <Suspense fallback={null}>
-            <img src="figures/spot/spot_grasp_simple.png" />
+            <img src="figures/spot/spot_grasp_simple.png" className="w-full h-auto" />
         </Suspense>
     </IframeSwitch>
 <figcaption>Figure 11: Simulation environment for Spot's multi-stage manipulation
@@ -500,7 +499,7 @@ static obstacles in the environment.
 
 <figure id="fig:spot_graph">
     <Suspense fallback={null}>
-        <img src="figures/spot/spot_graph.png" />
+        <img src="figures/spot/spot_graph.png" className="w-full h-auto"/>
     </Suspense>
     <figcaption>Figure 12: Sequential graph of Spot's multi-stage manipulation task.
 Blue shapes represent regions in the subgraphs, and red shapes denote
@@ -585,10 +584,10 @@ configuration.
 
 ### 4.4.2    Adapting to Dynamic Environments
 
-<figure id="fig:spot_collision_environmen" style={{marginLeft:'0', marginRight:'0'}}>
+<figure id="fig:spot_collision_environmen" className="mx-0">
 <IframeSwitch src="meshcats/spot_store_clutter.html" height="600px">
     <Suspense fallback={null}>
-        <img src="figures/spot/spot_collision_environment.png" />
+        <img src="figures/spot/spot_collision_environment.png" className="w-full h-auto"/>
     </Suspense>
 </IframeSwitch>
 <figcaption>Figure 13: The simulation environment presents a new challenge with
@@ -604,25 +603,25 @@ cluttered workspace! As shown in Figure
 access to the brown shelves, and several sugar boxes and mustard bottles
 occupy the racks and bin.
 
-<figure id="fig:spot_clutter_failure" style={{marginLeft:'0', marginRight:'0'}} >
-    <div style={{display: 'flex', flexDirection:"row", textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start'}}>
-    <figure id="fig:spot_clutter_failure_body" style={{marginLeft:'0px', marginRight:'5px'}}>
+<figure id="fig:spot_clutter_failure" className="mx-0" >
+    <div className="flex flex-row text-center justify-around items-start flex-wrap">
+    <figure id="fig:spot_clutter_failure_body" className="m-0 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-        <img src="figures/spot/spot_singulate_failure.png" />
+        <img src="figures/spot/spot_singulate_failure.png" className="flex-1 m-0" />
         </Suspense>
         <figcaption>(a) Spot’s body collides with the shelf during the initial
         approach.</figcaption>
     </figure>
-    <figure id="fig:spot_clutter_failure_grasp" style={{marginLeft:'5px', marginRight:'5px'}}>
+    <figure id="fig:spot_clutter_failure_grasp" className="my-0 mx-0.5 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-        <img src="figures/spot/spot_grap_failure.png" />
+        <img src="figures/spot/spot_grap_failure.png" className="flex-1 m-0" />
         </Suspense>
         <figcaption>(b) The sugar box being grasped collides with the
         shelf.</figcaption>
     </figure>
-    <figure id="fig:spot_clutter_failure_drop" style={{marginLeft:'5px', marginRight:'0'}}>
+    <figure id="fig:spot_clutter_failure_drop" className="m-0 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-        <img src="figures/spot/spot_drop_failure.png" />
+        <img src="figures/spot/spot_drop_failure.png" className="flex-1 m-0" />
         </Suspense>
         <figcaption>(c) Another sugar box obstructs the path as Spot moves towards
         the drop-off bin.</figcaption>
@@ -655,46 +654,44 @@ end-effector and include corresponding minimum distance constraints in
 subgraphs $G_{\text{C2}}$ and $G_{\text{C3}}$, as illustrated in Figure
 [4.27](#fig:spot_clutter_collision).
 
-<figure id="fig:spot_clutter_collision" style={{marginLeft:'0', marginRight:'0'}}>
-    <div style={{display: 'flex', flexDirection:"row", textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start'}}>
-    <figure style={{marginLeft:'0px', marginRight:'5px'}}>
-        <Suspense fallback={null}>
-        <img src="figures/spot/spot_grap_collision.png" />
-        </Suspense>
-        <figcaption>The collision sphere ensures sufficient clearance from the
-        shelf while grasping the sugar box.</figcaption>
-    </figure>
-    <figure style={{marginLeft:'0px', marginRight:'5px'}}>
-        <Suspense fallback={null}>
-        <img src="figures/spot/spot_drop_collision.png" />
-        </Suspense>
-        <figcaption>The sphere helps prevent collisions with the other sugar
-        boxes during the drop-off phase.</figcaption>
-    </figure>
+<figure id="fig:spot_clutter_collision" className="mx-0"> 
+    <div className="flex flex-row text-center justify-between items-start">
+        <figure className="ml-0 mr-1.25">
+            <Suspense fallback={null}>
+                <img src="figures/spot/spot_grap_collision.png" />
+            </Suspense>
+            <figcaption>The collision sphere ensures sufficient clearance from the shelf while grasping the sugar box.</figcaption>
+        </figure>
+        <figure className="ml-0 mr-1.25">
+            <Suspense fallback={null}>
+                <img src="figures/spot/spot_drop_collision.png" />
+            </Suspense>
+            <figcaption>The sphere helps prevent collisions with the other sugar boxes during the drop-off phase.</figcaption>
+        </figure>
     </div>
     <figcaption>Figure 15: The collision geometries considered by the
     minimum distance constraints are shown in red.</figcaption>
 </figure>
 
-<figure id="fig:spot_clutter_success" style={{marginLeft:'0', marginRight:'0'}}>
-    <div style={{display: 'flex', flexDirection:"row", textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start'}}>
-    <figure id="fig:spot_clutter_success_body" style={{marginLeft:'0px', marginRight:'5px'}}>
+<figure id="fig:spot_clutter_success" className="mx-0">
+    <div className="flex flex-row text-center justify-around items-start flex-wrap">
+    <figure id="fig:spot_clutter_success_body" className="m-0 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-        <img src="figures/spot/spot_singulate_clutter.png" />
+        <img src="figures/spot/spot_singulate_clutter.png" className="flex-1 m-0" />
         </Suspense>
         <figcaption>(a) Spot avoids the blue shelf by repositioning its body while
         maintaining the desired grasp location.</figcaption>
     </figure>
-    <figure id="fig:spot_clutter_success_grasp" style={{marginLeft:'5px', marginRight:'5px'}}>
+    <figure id="fig:spot_clutter_success_grasp" className="my-0 mx-0.5 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-        <img src="figures/spot/spot_grap_cluttered.png" />
+        <img src="figures/spot/spot_grap_cluttered.png" className="flex-1 m-0" />
         </Suspense>
         <figcaption>(b) The arm lifts the sugar box over the shelf without
         collision.</figcaption>
     </figure>
-    <figure id="fig:spot_clutter_success_drop"style={{marginLeft:'5px', marginRight:'0px'}}>
+    <figure id="fig:spot_clutter_success_drop" className="m-0 min-w-[250px] max-w-[33%]">
         <Suspense fallback={null}>
-        <img src="figures/spot/spot_drop_clutter.png" />
+        <img src="figures/spot/spot_drop_clutter.png" className="flex-1 m-0" />
         </Suspense>
         <figcaption>(c) As Spot drops the sugar box into the bin among other
         objects, it remains collision free.</figcaption>
@@ -745,16 +742,16 @@ keep it within the support polygon.
 
 <figure id="fig:spot_bimanual">
     <IframeSwitch src="meshcats/spot_bimanual.html" height="600px">
-        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px'}}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
             <Suspense fallback={null}>
-                <img src="figures/spot/spot_bimanual_0.png" />
-                <img src="figures/spot/spot_bimanual_4.png" />
-                <img src="figures/spot/spot_bimanual_1.png" />
-                <img src="figures/spot/spot_bimanual_5.png" />
-                <img src="figures/spot/spot_bimanual_2.png" />
-                <img src="figures/spot/spot_bimanual_6.png" />
-                <img src="figures/spot/spot_bimanual_3.png" />
-                <img src="figures/spot/spot_bimanual_7.png" />
+            <img src="figures/spot/spot_bimanual_0.png" />
+            <img src="figures/spot/spot_bimanual_4.png" />
+            <img src="figures/spot/spot_bimanual_1.png" />
+            <img src="figures/spot/spot_bimanual_5.png" />
+            <img src="figures/spot/spot_bimanual_2.png" />
+            <img src="figures/spot/spot_bimanual_6.png" />
+            <img src="figures/spot/spot_bimanual_3.png" />
+            <img src="figures/spot/spot_bimanual_7.png" />
             </Suspense>
         </div>
     </IframeSwitch>
@@ -785,19 +782,19 @@ sample points along the trajectory segment within each region,
 determined by the size of the collision-free set.
 
 <figure id="fig:spot_bimanual_highlight">
-    <div style={{display: 'flex', flexDirection:"row", textAlign: "center", justifyContent: 'space-between', alignItems: 'flex-start'}}>
-    <figure>
-        <Suspense fallback={null}>
-            <img src="figures/spot/spot_bimanual_special_0.png" />
-        </Suspense>
-        <figcaption>(a) Side view</figcaption>
-    </figure>
-    <figure>
-        <Suspense fallback={null}>
-            <img src="figures/spot/spot_bimanual_special_3.png" />
-        </Suspense>
-        <figcaption>(b) Top view</figcaption>
-    </figure>
+    <div className="flex flex-row text-center justify-between items-start">
+        <figure>
+            <Suspense fallback={null}>
+                <img src="figures/spot/spot_bimanual_special_0.png" />
+            </Suspense>
+            <figcaption>(a) Side view</figcaption>
+        </figure>
+        <figure>
+            <Suspense fallback={null}>
+                <img src="figures/spot/spot_bimanual_special_3.png" />
+            </Suspense>
+            <figcaption>(b) Top view</figcaption>
+        </figure>
     </div>
     <figcaption>Figure 18: Collision-free grasping configuration for two
     Spot robots, demonstrating coordinated motion planning in a

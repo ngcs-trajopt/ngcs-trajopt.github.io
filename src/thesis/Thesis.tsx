@@ -30,7 +30,7 @@ export function Thesis() {
         <Content />
       </A4Paper>
       <A4Paper>
-        <div style={{ lineHeight: "1.5" }}>
+        <div className="leading-relaxed">
           <Acknowledgments components={{ p: CustomParagraph }} />
         </div>
       </A4Paper>
@@ -91,52 +91,24 @@ function A4Paper({ children }: PropsWithChildren) {
 }
 
 function CustomParagraph(props: PropsWithChildren) {
-  return (
-    <p
-      style={{ textAlign: "justify", textIndent: "2em", marginBottom: "-12px" }}
-    >
-      {props.children}
-    </p>
-  );
+  return <p className="text-justify indent-8 mb-[-12px]">{props.children}</p>;
 }
 
 function Chapter({ num }: { num: number }) {
-  return (
-    <h1 style={{ marginTop: "90px", marginBottom: "50px" }}>Chapter {num}</h1>
-  );
+  return <h1 className="mt-18 mb-12">Chapter {num}</h1>;
 }
 function CustomH1(props: PropsWithChildren) {
-  return (
-    <h1 style={{ marginBottom: "50px", whiteSpace: "pre-wrap" }}>
-      {props.children}
-    </h1>
-  );
+  return <h1 className="mb-12 whitespace-pre-wrap">{props.children}</h1>;
 }
 
 function CustomH2(props: PropsWithChildren) {
   return (
-    <h2
-      style={{
-        marginTop: "40px",
-        marginBottom: "-5px",
-        whiteSpace: "pre-wrap",
-      }}
-    >
-      {props.children}
-    </h2>
+    <h2 className="mt-10 mb-[-5px] whitespace-pre-wrap">{props.children}</h2>
   );
 }
 
 function CustomH3(props: PropsWithChildren) {
   return (
-    <h3
-      style={{
-        marginTop: "40px",
-        marginBottom: "-5px",
-        whiteSpace: "pre-wrap",
-      }}
-    >
-      {props.children}
-    </h3>
+    <h3 className="mt-10 mb-[-5px] whitespace-pre-wrap">{props.children}</h3>
   );
 }

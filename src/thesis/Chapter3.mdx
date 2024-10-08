@@ -38,7 +38,7 @@ $(x_u, x_v) \in \mathcal X_e$ with directed edges
 $e = (u,v) \in \mathcal E$. The shortest path problem on a GCS can be
 formulated as the search for a path $p \in \relax$ (defined as an
 ordered list of vertices and edges) where:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \begin{align}
 \text{minimize}\quad & \sum_{e=(u,v) \in \mathcal E_p} l_e(x_u, x_v) \\ 
@@ -143,7 +143,7 @@ functions which directly optimize a weighted sum of the total path
 duration, and convex surrogates for path length and a path velocity
 regularization. We use the same objectives here, and add additional
 support for penalizing the higher derivatives of the trajectory:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \text{minimize}\quad aT + b L(r) + \sum_{n=2}^N c_n D(r,h,n)
 $$
@@ -156,7 +156,7 @@ the nth order derivative $D(r,h, n),$ respectively.
 Minimizing trajectory duration is achieved by considering the convex
 cost associated with minimizing each individual segment's duration's
 ($h_i$):
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 T = \sum_{i \in \mathcal I} h_i.
 $$
@@ -164,7 +164,7 @@ $$
 
 To minimize path length, we minimize the cumulative length between
 control points of each Bézier curve ($r_i$):
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 L(r_i) = \sum_{k=0}^{d-1} |r_{i,k+1} - r_{i,k} |_2.
 $$
@@ -177,7 +177,7 @@ Finally, to promote smoothness, we can minimize the trajectory's
 higher-order derivatives. We achieve this by minimizing the squared
 distance between control points of the Nth minus one derivative of
 $r(s)$, normalized by the duration:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 D (r,h,n) = \frac{1}{h} \sum_{k=0}^{d-n} \left| \frac{d^{n-1}r_{i,k+1}}{ds^{n-1}} - \frac{d^{n-1}r_{i,k}}{ds^{n-1}}\right|_2^2.
 $$
@@ -210,7 +210,7 @@ Bézier curve is also a Bézier curve. This allows us to impose linear
 constraints on the control points of the path, guaranteeing that
 velocity limits are respected throughout the entire trajectory. Here
 $\mathcal V$ is a convex set of the allowable velocities.
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \dot r(s) \in h \mathcal V.
 $$
@@ -219,27 +219,28 @@ $$
 However, constraints on higher-order derivatives, such as
 acceleration, are inherently nonlinear due to the relationship between
 path derivatives and time scaling:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \frac{d^N q(t)}{dt^N} = \frac{d^N r(s)/ds^N}{h^N}.
 $$
 </div>
 
-<figure id="fig:mcCormick" style={{display:'flex', alignSelf: 'center', alignItems:"center", flexDirection: 'column'}}>
-<Suspense fallback={null}>
-<img style={{width:"300px"}} src="figures/math/mcCormickEnvelope.png"/>
-</Suspense>
-<figcaption>Figure 1: Convex Approximations of 1D acceleration limits. The filled
-gray area represents the feasible set of the nonlinear constraint. The
-blue line represents a McCormick envelope, a convex relaxation of the
-original constraint. The red lines illustrate a tighter piecewise
-envelope. The orange line shows a simpler
-approximation.</figcaption>
+<figure id="fig:mcCormick" className="flex flex-col items-center">
+    <Suspense fallback={null}>
+        <img className="w-72" src="figures/math/mcCormickEnvelope.png" />
+    </Suspense>
+    <figcaption>
+        Figure 1: Convex Approximations of 1D acceleration limits. The filled
+        gray area represents the feasible set of the nonlinear constraint. The
+        blue line represents a McCormick envelope, a convex relaxation of the
+        original constraint. The red lines illustrate a tighter piecewise
+        envelope. The orange line shows a simpler approximation.
+    </figcaption>
 </figure>
 
 For example, consider a 1D path with acceleration $x$ and limits \[-1,
 1\]. The nonlinear constraint is:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 -1 \leq \frac{x}{h^2} \leq 1.
 $$
@@ -249,7 +250,7 @@ The feasible set is highlighted in gray in Figure [3.1](#fig:mcCormick)
 The McCormick envelope for this constraint, considering the range of $h$
 between $h_{min}$ and $h_{max}$, can be constructed using the following
 inequalities:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 h^N \leq \frac{h_{max}^N - h_{min}^N}{h_{max} - h_{min}}h + \frac{h_{max}h_{min}^N - h_{min}h_{max}^N}{h_{max} - h_{min}}.
 $$
@@ -263,7 +264,7 @@ but at the cost of increasing the size of the graph and the solve times.
 
 Alternatively, we use a simpler linear approximation, where $\mathcal D$
 is a convex set with the allowable derivatives:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \frac{d^N r(s)}{ds^N} \in h_0^{N-1} h \mathcal D,
 $$
@@ -278,7 +279,7 @@ Regardless of the chosen approximation, we refine the solution during
 the rounding stage using nonlinear optimization to ensure that the final
 trajectory strictly satisfies the original nonlinear acceleration
 constraints:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \frac{d^Nr(s)}{ds^N} \in h^N \mathcal D.
 $$
@@ -294,7 +295,7 @@ Bézier curve: $r_{i,0} = r_i(0)$ and $r_{i+1,d} = r_{i+1}(S)$.
 
 Zero-order continuity (position continuity) is achieved by requiring the
 initial and terminal points of consecutive Bézier curves to be equal:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 r_{k,d} = r_{k+1,0}.
 $$
@@ -306,14 +307,14 @@ To avoid sudden changes in velocity and acceleration, we can enforce
 higher-order continuity. The rounding problem receives these nonconvex
 equality constraint that relate the derivatives of consecutive Bézier
 curves:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \frac{d^Nr_{k,d}}{ds^N}h_{k+1}^N = \frac{d^Nr_{k+1,0}}{ds^N}h_k^N.
 $$
 </div>
 We introduce a convex surrogate by replacing the time scaling variables
 with a constant value ($h_0$) for each region:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \frac{d^Nr_{k,d}}{ds^N}h_{0, k+1}^N = \frac{d^Nr_{k+1,0}}{ds^N}h_{0,k}^N.
 $$
@@ -346,7 +347,7 @@ constraints during the rounding stage. Let $R_k(r(s_i))$ represent the
 geometry of the $k$-th link of the robot at sample point $s_i$, and
 $O_j$ represent the geometry of the $j$-th object in the environment. We
 enforce the following constraint:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \min_{x \in R_k(r(s_i)), y \in O_j} | x - y |_2 \geq d_{\text{min}}, \hspace{25pt} \forall (j, k) \in \mathcal{C}, \forall s_i \in S_I,
 $$
@@ -396,7 +397,7 @@ grasp-poses or end-effector velocity limits) with our joint space costs
 and constraints. We can enforce constraints on the robot's end-effector
 position, gaze direction, center of mass, or any other relevant function
 at user-specified points $s_i \in S_U$ along the trajectory $r(s_i)$:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 f_{kin}(r(s_i)) \in \relax, \hspace{35pt} \forall s_i \in S_U.
 $$
@@ -441,7 +442,7 @@ prevent the box from tipping over while not explicitly restriction
 configuration space velocities. Task-space velocity and acceleration
 constraints can be expressed using the kinematic Jacobian ($J$) and its
 derivative:
-<div style={{marginTop: '30px'}}>
+<div className="mt-3">
 $$
 \begin{align}
 J(r(s_i)) \dot{r}(s_i) &\in h\mathcal V, &&\forall s_i \in S_U,\\
