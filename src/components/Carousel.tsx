@@ -1,6 +1,6 @@
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { ChevronLeftSquare, ChevronRightSquare } from "lucide-react";
-import { useSpring, animated } from "@react-spring/web";
+import { animated, useSpringValue } from "@react-spring/web";
 
 interface CarouselProps {
   children: ReactNode[];
@@ -22,7 +22,7 @@ export function Carousel({ children }: CarouselProps) {
   return (
     <div className="relative w-full overflow-hidden">
       <SlidesContainer currentIndex={currentIndex}>{children}</SlidesContainer>
-      <div className="flex justify-between items-center my-2 select-none">
+      <div className="flex justify-between items-center my-2 mx-2 select-none">
         <ArrowButton
           direction="left"
           onClick={prevSlide}
@@ -66,22 +66,25 @@ interface ArrowButtonProps {
 }
 
 function ArrowButton({ direction, onClick, disabled }: ArrowButtonProps) {
-  const [hovered, setHovered] = useState(false);
-
-  const springProps = useSpring({
-    transform: hovered ? "scale(0.9)" : "scale(1)",
+  const transform = useSpringValue("scale(0.0)", {
     config: { tension: 300, friction: 10 },
   });
 
+  useEffect(() => {
+    if (disabled) {
+      transform.start("scale(0.0)", { config: { clamp: true } });
+    } else {
+      transform.start("scale(1)", { config: { clamp: false } });
+    }
+  }, [disabled, transform]);
+
   return (
     <animated.button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={springProps}
-      className={`p-2 bg-[#333] transition-opacity duration-500 border-0 rounded-md ${
-        disabled ? "opacity-0 pointer-events-none" : "opacity-100"
-      } hover:bg-[#595959]`}
+      onClick={() => !disabled && onClick()}
+      onMouseEnter={() => !disabled && transform.start("scale(0.9)")}
+      onMouseLeave={() => !disabled && transform.start("scale(1)")}
+      style={{ transform }}
+      className={`p-2 bg-[#333] transition-opacity duration-500 border-0 rounded-md hover:bg-[#595959]`}
     >
       {direction === "left" ? (
         <ChevronLeftSquare className="text-gray-50" />
@@ -112,14 +115,21 @@ interface AnimatedDotProps {
 }
 
 function AnimatedDot({ isActive }: AnimatedDotProps) {
-  const springProps = useSpring({
-    transform: isActive ? "scale(1.5)" : "scale(1)",
+  const transform = useSpringValue("scale(0)", {
     config: { tension: 300, friction: 10 },
   });
+  transform.start("scale(1)");
+  useEffect(() => {
+    if (isActive) {
+      transform.start("scale(1.5)");
+    } else {
+      transform.start("scale(1)");
+    }
+  }, [isActive, transform]);
 
   return (
     <animated.div
-      style={springProps}
+      style={{ transform }}
       className={`h-2 w-2 rounded-full mx-1 ${
         isActive ? "bg-gray-800" : "bg-gray-400"
       }`}

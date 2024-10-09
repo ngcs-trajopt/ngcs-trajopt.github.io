@@ -1,8 +1,14 @@
 import { Suspense, useState } from "react";
+import { useSpring, animated } from "@react-spring/web";
 
 export function UAVOverview({ ...props }) {
+  const fade = useSpring({ opacity: 1, from: { opacity: 0 } });
   return (
-    <div className={`${props.className} relative select-none`} {...props}>
+    <animated.div
+      style={fade}
+      className={`${props.className} relative select-none`}
+      {...props}
+    >
       <Suspense fallback={null}>
         <img src="figures/uav/Drones.png" className="bg-white w-full h-full" />
         <HoverableGif
@@ -22,7 +28,7 @@ export function UAVOverview({ ...props }) {
           className="absolute w-[27%] scale-[1.05] left-[0.4%] top-[56.6%]"
         />
       </Suspense>
-    </div>
+    </animated.div>
   );
 }
 
