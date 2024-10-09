@@ -4,6 +4,7 @@ import {
   type PropsWithChildren,
   type ReactNode,
   Suspense,
+  useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
@@ -36,7 +37,12 @@ export function Button({
     config: { tension: 600, friction: 10, clamp: true },
   });
   const yRotation = useSpringValue(0);
-  const scale = useSpringValue(1);
+  const scale = useSpringValue(0);
+  const textScale = useSpringValue(0);
+  useEffect(() => {
+    scale.start(1);
+    textScale.start(1);
+  }, []);
 
   const warningMessageRef = useRef<WarningMessageRef>(null);
 
@@ -79,7 +85,7 @@ export function Button({
       >
         {children}
       </animated.group>
-      <group position-y={-2}>
+      <animated.group position-y={-2} scale={textScale}>
         <Suspense fallback={null}>
           <Root>
             <Container
@@ -97,7 +103,7 @@ export function Button({
             </Container>
           </Root>
         </Suspense>
-      </group>
+      </animated.group>
     </group>
   );
 }
@@ -137,10 +143,9 @@ const WarningMessage = forwardRef<WarningMessageRef, WarningMessageProps>(
 
     return (
       <Container
-        alignSelf="center"
-        alignItems="center"
         positionType="absolute"
         transformTranslateZ={100}
+        transformTranslateX={-800}
         transformTranslateY={positionY}
         backgroundOpacity={messageOpacity}
         backgroundColor="#ff9900"
