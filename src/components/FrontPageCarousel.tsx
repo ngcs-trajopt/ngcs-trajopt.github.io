@@ -7,9 +7,57 @@ export function FrontPageCarousel() {
   return (
     <div className="max-w-[300mm] mx-auto font-sans leading-loose text-lg p-4 bg-white shadow-md rounded-lg mb-5">
       <Carousel
-        children={[<UAVOverview />, <IiwaNGCS />, <IK />, <IiiwaMinDist />]}
+        children={[
+          <UAVOverview />,
+          <TwoDComparison />,
+          <IiwaNGCS />,
+          <IK />,
+          <IiiwaMinDist />,
+        ]}
       />
     </div>
+  );
+}
+
+function TwoDComparison() {
+  return (
+    <Suspense fallback={null}>
+      <div className="flex flex-row justify-between items-start flex-wrap">
+        <figure className="flex-1 m-0.5 text-center">
+          <img
+            src="figures/two_dimensional_example/gcs_classical.gif"
+            className="w-full h-auto"
+          />
+          {/* <img
+            src="figures/two_dimensional_example/classical_gcs_deriatives.png"
+            className="w-full h-auto"
+          /> */}
+          <figcaption>(a) Convex GCS</figcaption>
+        </figure>
+        <figure className="flex-1 m-0.5 text-center">
+          <img
+            src="figures/two_dimensional_example/gcs_toppra.gif"
+            className="w-full h-auto"
+          />
+          {/* <img
+            src="figures/two_dimensional_example/toppra_gcs_derivatives.png"
+            className="w-full h-auto"
+          /> */}
+          <figcaption>(b) GCS + TOPP</figcaption>
+        </figure>
+        <figure className="flex-1  m-0.5 text-center">
+          <img
+            src="figures/two_dimensional_example/gcs_nonlinear.gif"
+            className="w-full h-auto"
+          />
+          {/* <img
+            src="figures/two_dimensional_example/ngcs_derivatives.png"
+            className="w-full h-auto"
+          /> */}
+          <figcaption>(c) NGCS</figcaption>
+        </figure>
+      </div>
+    </Suspense>
   );
 }
 

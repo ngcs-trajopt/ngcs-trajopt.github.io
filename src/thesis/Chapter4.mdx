@@ -26,26 +26,26 @@ problems.
 <figure id="fig:2d_gcs_comparison">
     <Suspense fallback={null}>
     <div className="flex flex-row justify-between items-start flex-wrap">
-        <figure id="fig:2d_obstacles" className="flex-1 min-w-[100px] m-0.5 text-center">
+        <figure id="fig:2d_obstacles" className="flex-1 min-w-[100px] max-w-[40%] m-0.5 text-center">
             <img src="figures/two_dimensional_example/environment.png" className="w-full h-auto" />
             <figcaption>(a) 2D Environment</figcaption>
         </figure>
-        <figure id="fig:2d_decomposition" className="flex-1 min-w-[100px] m-0.5 text-center">
+        <figure id="fig:2d_decomposition" className="flex-1 min-w-[100px] max-w-[40%] m-0.5 text-center">
             <img src="figures/two_dimensional_example/decomposition.png" className="w-full h-auto" />
             <figcaption>(b) Free Space</figcaption>
         </figure>
-        <figure id="fig:classical_gcs" className="flex-1 min-w-[100px] m-0.5 text-center">
-            <img src="figures/two_dimensional_example/classical_gcs_traj.png" className="w-full h-auto" />
+        <figure id="fig:classical_gcs" className="flex-1 min-w-[100px] max-w-[40%] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/gcs_classical.gif" className="w-full h-auto" />
             <img src="figures/two_dimensional_example/classical_gcs_deriatives.png" className="w-full h-auto" />
             <figcaption>(c) Convex GCS</figcaption>
         </figure>
-        <figure id="fig:gcs_toppra" className="flex-1 min-w-[100px] m-0.5 text-center">
-            <img src="figures/two_dimensional_example/toppra_gcs_traj.png" className="w-full h-auto" />
+        <figure id="fig:gcs_toppra" className="flex-1 min-w-[100px] max-w-[40%] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/gcs_toppra.gif" className="w-full h-auto" />
             <img src="figures/two_dimensional_example/toppra_gcs_derivatives.png" className="w-full h-auto" />
             <figcaption>(d) GCS + TOPP</figcaption>
         </figure>
-        <figure id="fig:gcs_nonlinear" className="flex-1 min-w-[100px] m-0.5 text-center">
-            <img src="figures/two_dimensional_example/ngcs_traj.png" className="w-full h-auto" />
+        <figure id="fig:gcs_nonlinear" className="flex-1 min-w-[100px] max-w-[40%] m-0.5 text-center">
+            <img src="figures/two_dimensional_example/gcs_nonlinear.gif" className="w-full h-auto" />
             <img src="figures/two_dimensional_example/ngcs_derivatives.png" className="w-full h-auto" />
             <figcaption>(e) NGCS</figcaption>
         </figure>
@@ -108,7 +108,7 @@ path is fixed, and it only optimizes for time.
         <figure id="fig:inter_gcs" className="flex-1 min-w-[300px] m-2.5">
             <div className="flex flex-row items-center flex-wrap">
                 <Suspense fallback={null}>
-                    <img src="figures/two_dimensional_example/intermediate_traj.png" className="h-[200px] w-auto object-contain m-1.25" />
+                    <img src="figures/two_dimensional_example/gcs_intermediate.gif" className="h-[200px] w-auto object-contain m-1.25" />
                     <img src="figures/two_dimensional_example/intermediate_derivatives.png" className="h-[200px] w-auto object-contain m-1.25" />
                 </Suspense>
                 <figcaption>(a) Planning through Subspaces</figcaption>
@@ -117,7 +117,7 @@ path is fixed, and it only optimizes for time.
         <figure id="fig:multi_gcs" className="flex-1 min-w-[300px] m-2.5">
             <div className="flex flex-row items-center flex-wrap">
                 <Suspense fallback={null}>
-                    <img src="figures/two_dimensional_example/multi_start_traj.png" className="h-[200px] w-auto object-contain m-1.25" />
+                    <img src="figures/two_dimensional_example/gcs_multi_start.gif" className="h-[200px] w-auto object-contain m-1.25" />
                     <img src="figures/two_dimensional_example/multi_start_derivatives.png" className="h-[200px] w-auto object-contain m-1.25" />
                 </Suspense>
                 <figcaption>(b) Multi Start/Goal Planning</figcaption>
