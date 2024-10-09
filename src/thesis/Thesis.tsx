@@ -56,7 +56,7 @@ export default function Thesis() {
 
 function A4Paper({ children }: PropsWithChildren) {
   return (
-    <div className="max-w-[210mm] bg-white p-10 md:p-[110px] font-serif text-lg shadow-md rounded-lg mb-5 mx-auto leading-loose">
+    <div className="max-w-[210mm] bg-white p-6 md:p-[110px] font-serif text-md md:text-lg shadow-md rounded-lg mb-5 mx-auto leading-loose">
       <style>
         {`
                     a {
