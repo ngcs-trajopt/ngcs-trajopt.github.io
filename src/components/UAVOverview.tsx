@@ -2,7 +2,7 @@ import { Suspense, useState } from "react";
 
 export function UAVOverview({ ...props }) {
   return (
-    <div className="relative select-none" {...props}>
+    <div className={`${props.className} relative select-none`} {...props}>
       <Suspense fallback={null}>
         <img src="figures/uav/Drones.png" className="bg-white w-full h-full" />
         <HoverableGif

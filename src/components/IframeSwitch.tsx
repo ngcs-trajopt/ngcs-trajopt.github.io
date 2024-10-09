@@ -2,7 +2,7 @@ import React, { Suspense, useState } from "react";
 
 interface IframeSwitchProps {
   src: string;
-  height: string;
+  height?: string;
   children: React.ReactNode;
 }
 
@@ -10,7 +10,7 @@ export function IframeSwitch({ src, height, children }: IframeSwitchProps) {
   const [showIframe, setShowIframe] = useState(false);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full flex items-center justify-around">
       {showIframe ? (
         <>
           <button

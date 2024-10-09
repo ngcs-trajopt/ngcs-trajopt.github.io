@@ -319,10 +319,12 @@ starting above the shelf, then visiting the top rack, middle rack, left
 bin, right bin, and finally returning to the top of the shelf.
 
 <figure id="fig:kuka_traj" className="flex flex-row justify-between items-end flex-wrap mx-0">
-    <IframeSwitch src="meshcats/iiwa_ik.html" height="600px">
+    <IframeSwitch src="meshcats/iiwa_ngcs.html" height="600px">
     <Suspense fallback={null}>
-        <img src="figures/iiwa_example/iiwa_gcs_comparison.png" className="w-full h-auto" />
-        <img src="figures/iiwa_example/gcs_comparison_derivative.png" className="w-full h-auto" />
+        <div className="flex flex-col">
+            <img src="figures/iiwa_example/iiwa_gcs_comparison.png" className="w-full h-auto" />
+            <img src="figures/iiwa_example/gcs_comparison_derivative.png" className="w-full h-auto" />
+        </div>
     </Suspense>
     </IframeSwitch>
 <figcaption>Figure 8: The top image shows the Kuka robot in the
