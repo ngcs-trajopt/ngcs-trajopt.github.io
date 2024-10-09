@@ -36,29 +36,29 @@ function IK() {
   return (
     <IframeSwitch src="meshcats/iiwa_ik.html" height="400px">
       <div className="flex flex-row text-center justify-around items-start flex-wrap">
-        <figure className="m-0 max-w-[33%]">
+        <figure className="m-0 w-[33%]">
           <Suspense fallback={null}>
             <img
               src="figures/iiwa_example/ik_traj_start.png"
-              className="flex-1 m-0"
+              className="h-auto w-full"
             />
           </Suspense>
           <figcaption>(a) The robot starts in the right bin</figcaption>
         </figure>
-        <figure className="my-0 mx-0.5 max-w-[33%]">
+        <figure className="my-0 mx-0.5 w-[33%]">
           <Suspense fallback={null}>
             <img
               src="figures/iiwa_example/ik_traj_configuration.png"
-              className="flex-1 m-0"
+              className="h-auto w-full"
             />
           </Suspense>
           <figcaption>(b) Planning to a goal configuration</figcaption>
         </figure>
-        <figure className="m-0 max-w-[33%]">
+        <figure className="m-0 w-[33%]">
           <Suspense fallback={null}>
             <img
               src="figures/iiwa_example/ik_traj_position.png"
-              className="flex-1 m-0"
+              className="h-auto w-full"
             />
           </Suspense>
           <figcaption>(c) Jointly solving for IK</figcaption>
