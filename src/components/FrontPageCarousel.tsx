@@ -5,7 +5,7 @@ import { UAVOverview } from "./UAVOverview";
 
 export function FrontPageCarousel() {
   return (
-    <div className="max-w-[300mm] mx-auto font-sans leading-loose text-lg p-4 bg-gray-50 shadow-md rounded-lg mb-5">
+    <div className="max-w-[300mm] mx-auto font-sans leading-loose text-lg p-4 bg-white shadow-md rounded-lg mb-5">
       <Carousel
         children={[<UAVOverview />, <IiwaNGCS />, <IK />, <IiiwaMinDist />]}
       />

@@ -27,7 +27,7 @@ export default function App() {
           affiliation="Massachusetts Institute of Technology"
           note="IROS 2024"
         />
-        <Suspense fallback={null}>
+        <Suspense fallback={<div className="h-[150px]" />}>
           <Links />
         </Suspense>
         <FrontPageCarousel />
