@@ -39,12 +39,41 @@ export function Button({
   const yRotation = useSpringValue(0);
   const scale = useSpringValue(0);
   const textScale = useSpringValue(0);
+
   useEffect(() => {
     scale.start(1);
     textScale.start(1);
   }, []);
 
   const warningMessageRef = useRef<WarningMessageRef>(null);
+
+  function onClickHandler() {
+    onClick?.();
+    if (link) {
+      yRotation.start(2 * Math.PI, { config: config.slow }).then(() => {
+        yRotation.start(0, { config: config.molasses });
+        if (link.includes("#")) {
+          const hash = link.split("#")[1];
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        } else {
+          window.location.href = link;
+        }
+      });
+    } else {
+      // Shake the button.
+      //@ts-expect-error There is some weirdness with the types here.
+      xSpring.start([
+        { to: 0.4, delay: 0 },
+        { to: -0.4, delay: 0 },
+        { to: 0.4, delay: 0 },
+        { to: 0, delay: 0 },
+      ]);
+      warningMessageRef.current?.show();
+    }
+  }
 
   return (
     <group {...props}>
@@ -55,33 +84,7 @@ export function Button({
         rotation-y={yRotation}
         onPointerOver={() => scale.start(1.5)}
         onPointerOut={() => scale.start(1)}
-        onClick={() => {
-          onClick?.();
-          if (link) {
-            yRotation.start(2 * Math.PI, { config: config.slow }).then(() => {
-              yRotation.start(0, { config: config.molasses });
-              if (link.includes("#")) {
-                const hash = link.split("#")[1];
-                const element = document.getElementById(hash);
-                if (element) {
-                  element.scrollIntoView({ behavior: "smooth" });
-                }
-              } else {
-                window.location.href = link;
-              }
-            });
-          } else {
-            // Shake the button.
-            //@ts-expect-error There is some weirdness with the types here.
-            xSpring.start([
-              { to: 0.4, delay: 0 },
-              { to: -0.4, delay: 0 },
-              { to: 0.4, delay: 0 },
-              { to: 0, delay: 0 },
-            ]);
-            warningMessageRef.current?.show();
-          }
-        }}
+        onClick={onClickHandler}
       >
         {children}
       </animated.group>
@@ -94,7 +97,14 @@ export function Button({
               paddingY={30}
               borderRadius={30}
             >
-              <LocalText color="#f0f0f0" fontSize={100}>
+              <LocalText
+                color="#f0f0f0"
+                fontSize={100}
+                onClick={onClickHandler}
+                onHoverChange={(hovered: boolean) =>
+                  hovered ? textScale.start(1.2) : textScale.start(1.0)
+                }
+              >
                 {name}
               </LocalText>
               <WarningMessage ref={warningMessageRef}>

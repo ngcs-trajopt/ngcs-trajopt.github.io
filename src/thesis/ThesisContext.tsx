@@ -14,7 +14,6 @@ export const ThesisProvider = ({ children }: { children: ReactNode }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const showThesis = () => {
-    console.log('showThesis');
     setIsVisible(true);
   };
 
